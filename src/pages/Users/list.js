@@ -1,53 +1,68 @@
 import Modal from "../../components/modalEdit"
-import React, { Component } from "react"
-export default class list extends Component {
-  state = {
-    modalShow: false,
-  }
-  toggleModal() {
-    this.setState({ modalShow: !this.state.modalShow })
-  }
+import React, { useState } from "react"
+import { makeStyles } from "@material-ui/core/styles"
+import Button from "@material-ui/core/Button"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
+import Divider from "@material-ui/core/Divider"
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        justifyContent: "space-between",
+    },
+    header: {
+        marginTop: 70,
+    },
+    textField: {
+        width: "85%",
+        margin: 8,
+    },
+    button: {
+        margin: theme.spacing(1),
+    },
+}))
 
-  render() {
-    // console.log("======render list", this.props);
+export default function List(props) {
+    const classes = useStyles()
+    const [state, setState] = useState(false)
+    const toggleModal = () => {
+        setState(!state)
+    }
+
+    // console.log("======render list", props);
     return (
-      <li className="list-group-item  userTasksLi">
-        <div className="list-item">
-          <i className="fas fa-thumbtack"></i>
-          <span>{this.props.title}</span>
-        </div>
-
-        <div className="list-item">
-          <span>{this.props.time}</span>
-        </div>
-
-        <div className="list-item">
-          <button onClick={this.toggleModal.bind(this)} type="button" className="btn btn-outline-warning">
-            <i className="fas fa-edit"></i>
-          </button>
-          <button
-            onClick={() => {
-              this.props.deleteTask(this.props.id_user, this.props.id_task, this.props.id)
-            }}
-            type="button"
-            className="btn btn-outline-danger">
-            <i className="fas fa-trash-alt"></i>
-          </button>
-          {this.state.modalShow ? (
-            <Modal
-              id_user={this.props.id_user}
-              id_task={this.props.id_task}
-              title={this.props.title}
-              value={this.props.value}
-              editTask={this.props.editTask}
-              changeTitlebyModal={this.props.changeTitlebyModal}
-              toggleModal={this.toggleModal.bind(this)}
-            />
-          ) : null}
-        </div>
-      </li>
+        <>
+            <ListItem className={classes.root}>
+                <ListItemText primary={props.id + 1} />
+                <ListItemText primary={props.title} />
+                <ListItemText primary={props.time} />
+                <Button onClick={toggleModal} variant="contained" className={classes.button}>
+                    edit
+                </Button>
+                <Button
+                    onClick={() => {
+                        props.deleteTask(props.id_user, props.id_task, props.id)
+                    }}
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}>
+                    DELL
+                </Button>
+                {/* {state ? (
+                    <Modal
+                        id_user={props.id_user}
+                        id_task={props.id_task}
+                        title={props.title}
+                        value={props.value}
+                        editTask={props.editTask}
+                        changeTitlebyModal={props.changeTitlebyModal}
+                        toggleModal={toggleModal}
+                    />
+                ) : null} */}
+            </ListItem>
+            <Divider />
+        </>
     )
-  }
 }
 
 // export default function list({ nameTask, id }) {

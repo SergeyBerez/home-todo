@@ -50,7 +50,14 @@ function App() {
                 })
             }
         }
-        let uniqeArray = Array.from(new Set(users.map(JSON.stringify))).map(JSON.parse)
+        let uniqeArray = users.filter((item, index, self) => {
+            return (
+                index ===
+                self.findIndex((obj) => {
+                    return item.id_user === obj.id_user
+                })
+            )
+        })
         console.log(uniqeArray)
 
         localStorage.setItem("users", JSON.stringify(uniqeArray))

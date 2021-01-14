@@ -1,17 +1,16 @@
-
 ul {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }
 .MuiFormControl-fullWidth {
-  width: 90%;
+    width: 90%;
 }
 
 .MuiAlert-message {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* .block-users-links {
@@ -21,51 +20,51 @@ ul {
   position: relative;
 } */
 a.nav-link {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-
-  transition: background 0.5s;
-  /* color: #333; */
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.5s;
+    /* color: #333; */
 }
 a.active {
-  /* color: #333;
+    /* color: #333;
   background: rgba(128, 128, 128, 0.479);
   border-radius: 5px; */
 }
 a:hover {
-  /* background: rgba(135, 136, 148, 0.479);
+    /* background: rgba(135, 136, 148, 0.479);
   border-radius: 5px; */
 }
 p {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 p.textcheck {
-  text-decoration: line-through;
+    text-decoration: line-through;
 }
 .fas.fa-user.i {
-  /* display: inline-block;
+    /* display: inline-block;
   vertical-align: middle; */
 }
 span {
-  /* display: inline-block;
+    /* display: inline-block;
   vertical-align: middle; */
-  /* margin-left: 20px; */
-  /* vertical-align: middle; */
+    /* margin-left: 20px; */
+    /* vertical-align: middle; */
 }
 .list-group {
-  background-color: honeydew;
-  list-style: none;
+    background-color: honeydew;
+    list-style: none;
 }
 
 .modal {
-  display: block;
+    display: block;
 }
 .list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
