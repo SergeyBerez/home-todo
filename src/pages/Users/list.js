@@ -4,7 +4,10 @@ import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
+import DeleteIcon from "@material-ui/icons/Delete"
 import Divider from "@material-ui/core/Divider"
+import EditIcon from "@material-ui/icons/Edit"
+import Typography from "@material-ui/core/Typography"
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -33,21 +36,31 @@ export default function List(props) {
     return (
         <>
             <ListItem className={classes.root}>
-                <ListItemText primary={props.id + 1} />
-                <ListItemText primary={props.title} />
-                <ListItemText primary={props.time} />
-                <Button onClick={toggleModal} variant="contained" className={classes.button}>
-                    edit
-                </Button>
-                <Button
-                    onClick={() => {
-                        props.deleteTask(props.id_user, props.id_task, props.id)
-                    }}
-                    variant="contained"
-                    color="secondary"
-                    className={classes.button}>
-                    DELL
-                </Button>
+                <Typography>{props.id + 1}</Typography>
+
+                <Typography>{props.title}</Typography>
+
+                <Typography>{props.time}</Typography>
+                <div>
+                    <Button
+                        onClick={toggleModal}
+                        variant="contained"
+                        className={classes.button}
+                        startIcon={<EditIcon />}>
+                        edit
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            props.deleteTask(props.id_user, props.id_task, props.id)
+                        }}
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<DeleteIcon />}
+                        className={classes.button}>
+                        {" "}
+                        DELL
+                    </Button>
+                </div>
                 {/* {state ? (
                     <Modal
                         id_user={props.id_user}
