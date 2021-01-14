@@ -1,93 +1,123 @@
-import React from "react";
-import List from "./list";
-export default class UserPersonalTasks extends React.Component {
-  state = {
-    tasks: [],
-  };
+import React from "react"
+import List from "./list"
+import Button from "@material-ui/core/Button"
+import { makeStyles } from "@material-ui/core/styles"
+import TextField from "@material-ui/core/TextField"
+import Alert from "@material-ui/lab/Alert"
 
-  componentDidMount() {}
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  header: {
+    marginTop: 70,
+  },
+  textField: {
+    width: "85%",
+    margin: 8,
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}))
 
-  render() {
-    console.log("==============UserPersonalTasks render user tasks");
-    let RenderUserTask;
-    let user;
-    if (Object.keys(this.props.users).length) {
-      user = this.props.users.find((user) => {
-        return user.id_user === parseInt(this.props.history.match.params.id);
-      });
+const UserPersonalTasks = (props) => {
+  const tasks = []
+  const classes = useStyles()
 
-      RenderUserTask = user.tasks.map((task, i) => {
-        return (
-          <List
-            key={i}
-            id={i}
-            id_user={parseInt(this.props.history.match.params.id)}
-            id_task={task.id_task}
-            value={this.props.valueTodo}
-            title={task.title}
-            time={task.time_task}
-            editTask={this.props.editTask}
-            changeTitlebyModal={this.props.changeTitlebyModal}
-            deleteTask={this.props.deleteTask}
+  console.log("==============UserPersonalTasks render user tasks", props)
+  let RenderUserTask
+  let user
+  if (props.users.length) {
+    user = props.users.find((user) => {
+      return user.id_user === parseInt(props.history.match.params.id)
+    })
 
-            // showModal={item.showModal}
-          />
-        );
-      });
+    if (user.tasks === undefined) {
+      user.tasks = tasks
     }
 
-    return (
-      <div>
-        <div className="alert alert-primary" role="alert">
-          {RenderUserTask === undefined ? (
-            <h1>at firs add user</h1>
-          ) : (
-            <>
-              <h1>{user.user_name}</h1>
+    RenderUserTask = user.tasks.map((task, i) => {
+      return (
+        <List
+          key={i}
+          id={i}
+          id_user={parseInt(props.history.match.params.id)}
+          id_task={task.id_task}
+          value={props.valueTodo}
+          title={task.title}
+          time={task.time_task}
+          editTask={props.editTask}
+          changeTitlebyModal={props.changeTitlebyModal}
+          deleteTask={props.deleteTask}
 
-              <p>add tasks {user.tasks.length}</p>
-            </>
-          )}
-        </div>
-
-        <div className="input-group col-lg-6">
-          <input
-            value={this.props.valueUser}
-            onKeyUp={(e) => {
-              this.props.keyHandle(
-                e,
-                parseInt(this.props.history.match.params.id),
-                user.tasks.length
-              );
-            }}
-            onChange={(e) => {
-              this.props.changeTitleUserTask(e.target.value);
-            }}
-            type="text"
-            className="form-control"
-          />
-
-          <div className="input-group-append">
-            <button
-              onClick={() => {
-                this.props.addTodoTaskUser(
-                  parseInt(this.props.history.match.params.id),
-                  user.tasks.length
-                );
-              }}
-              disabled={Object.keys(this.props.users).length === 0}
-              className="btn btn-secondary"
-              type="button"
-            >
-              add task
-            </button>
-          </div>
-        </div>
-        <div>
-          <ul className="list-group list-group-flush">{RenderUserTask} </ul>
-          {/* {user.tasks.length === 0 ? <p>добавьте user</p> : null} */}
-        </div>
-      </div>
-    );
+          // showModal={item.showModal}
+        />
+      )
+    })
   }
+
+  return (
+    <div className={classes.header}>
+      <Alert icon={false} severity="info" className={classes.root}>
+        {" "}
+        {RenderUserTask === undefined ? (
+          <h1>at firs add user</h1>
+        ) : (
+          <>
+            <h2>{user.user_name}</h2>
+            &nbsp;
+            <h3>tasks &nbsp;{user.tasks.length}</h3>
+          </>
+        )}
+      </Alert>
+      <TextField
+        id="standard-full-width"
+        label="Enter task"
+        className={classes.textField}
+        placeholder="name task"
+        helperText=""
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        type="text"
+        value={props.valueUser}
+        onKeyUp={(e) => {
+          props.keyHandle(e, parseInt(props.history.match.params.id), user.tasks.length)
+        }}
+        onChange={(e) => {
+          props.changeTitleUserTask(e.target.value)
+        }}
+        type="text"></TextField>
+      <Button
+        onClick={() => {
+          props.addTodoTaskUser(parseInt(props.history.match.params.id), user.tasks.length)
+        }}
+        disabled={props.users.length === 0}
+        variant="contained"
+        className={classes.button}>
+        ADD TASK
+      </Button>
+      {/* <div className="input-group col-lg-6">
+        <div className="input-group-append">
+          <button
+            onClick={() => {
+              props.addTodoTaskUser(parseInt(props.history.match.params.id), user.tasks.length)
+            }}
+            disabled={props.users.length === 0}
+            className="btn btn-secondary"
+            type="button">
+            add task
+          </button>
+        </div>
+      </div> */}
+      <div>
+        <ul className="list-group list-group-flush">{RenderUserTask} </ul>
+        {/* {user.tasks.length === 0 ? <p>добавьте user</p> : null} */}
+      </div>
+    </div>
+  )
 }
+export default UserPersonalTasks

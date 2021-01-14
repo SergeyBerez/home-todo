@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, NavLink, Redirect } from "react-router-dom"; 
+import { Route, Switch, NavLink, Redirect } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
@@ -16,10 +16,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import LinkIcon from "@material-ui/icons/Link";
-import PeopleAltTwoToneIcon from "@material-ui/icons/PeopleAltTwoTone";
 
 const drawerWidth = 240;
 
@@ -81,27 +78,26 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
- const links = [
-    {
-      title: "home",
-      link: "/react_todo",
-     
-    },
-    {
-      title: "users",
-      link: "/users",
-    },
-    {
-      title: "about",
-      link: "/about",
-    },
-  ];
+const links = [
+  {
+    title: "home",
+    link: "/",
+  },
+  {
+    title: "users",
+    link: "/users",
+  },
+  {
+    title: "about",
+    link: "/about",
+  },
+];
 
 const MiniDrawer = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
- 
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"
 
-import { NavLink } from "react-router-dom";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
-import PersonOutlineTwoToneIcon from "@material-ui/icons/PersonOutlineTwoTone";
+import { NavLink } from "react-router-dom"
+import ListItem from "@material-ui/core/ListItem"
+import ListItemText from "@material-ui/core/ListItemText"
+import Button from "@material-ui/core/Button"
+import { makeStyles } from "@material-ui/core/styles"
+import TextField from "@material-ui/core/TextField"
+import Alert from "@material-ui/lab/Alert"
+import DeleteIcon from "@material-ui/icons/Delete"
+import PersonOutlineTwoToneIcon from "@material-ui/icons/PersonOutlineTwoTone"
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -17,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     textAlign: "center",
   },
-}));
+}))
 
 function User({ users, deleteUser }) {
-  const classes = useStyles();
-  console.log(users);
+  const classes = useStyles()
+
   return users.map((user, i) => {
     return (
       <li className={classes.li} key={i}>
@@ -35,38 +37,19 @@ function User({ users, deleteUser }) {
           </NavLink>
         </ListItem>
 
-        {/* <div>
-            {" "}
-            <i className="fas fa-user i"></i>
-            <span>{user.user_name}</span>()
-          </div> */}
-
-        {/* <span>{user.time}</span>
-          <span> you have &nbsp;{user.countTask} tasks</span> */}
-
         <Button
           onClick={() => {
-            deleteUser(i);
+            deleteUser(i)
           }}
           variant="contained"
           color="secondary"
           className={classes.button}
-          startIcon={<DeleteIcon />}
-        >
+          startIcon={<DeleteIcon />}>
           Delete
         </Button>
-        {/* <button
-          onClick={() => {
-            deleteUser(i);
-          }}
-          type="button"
-          className="btn btn-outline-danger"
-        >
-          <i className="fas fa-trash-alt"></i>
-        </button> */}
       </li>
-    );
-  });
+    )
+  })
 }
 
-export default User;
+export default User

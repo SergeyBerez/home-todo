@@ -48,11 +48,9 @@ function Users(props) {
         <TextField
           value={props.value}
           onChange={(e) => {
-            props.changeTitle(e.target.value);
+            props.changeTitle(e.target.value)
           }}
-          onKeyUp={(e) => {
-            props.keyHandle(e);
-          }}
+          onKeyUp={props.keyHandle}
           id="standard-full-width"
           label="Enter user"
           className={classes.textField}
@@ -64,11 +62,7 @@ function Users(props) {
           }}
           type="text"
         />
-        <Button
-          onClick={props.addUser}
-          variant="contained"
-          className={classes.button}
-        >
+        <Button onClick={props.addUser} variant="contained" className={classes.button}>
           ADD USER
         </Button>
       </div>
@@ -76,6 +70,6 @@ function Users(props) {
         <User users={props.users} deleteUser={props.deleteUser}></User>
       </ul>
     </div>
-  );
+  )
 }
 export default Users;
