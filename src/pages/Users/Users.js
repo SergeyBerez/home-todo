@@ -18,11 +18,12 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 70,
     },
     textField: {
-        width: "85%",
+        width: "70%",
         margin: 8,
     },
     button: {
         margin: theme.spacing(1),
+        fontSize: "1rem",
     },
 }))
 
@@ -70,7 +71,6 @@ function Users(props) {
             </div>
             <List>
                 <User users={props.users} deleteUser={props.deleteUser}></User>
-            
             </List>
         </div>
     )

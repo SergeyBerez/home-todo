@@ -11,26 +11,36 @@ import Home from "./pages/Home"
 import Users from "./pages/Users/Users"
 import UserPersonalTasks from "./pages/Users/UserPersonalTasks"
 import About from "./pages/About"
+import { makeStyles } from "@material-ui/core/styles"
 
-// import Home from "./components/pages/list";
+const useStyles = makeStyles((theme) => ({
+    root: {
+        [theme.breakpoints.up("xs")]: {
+            maxWidth: "400px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
+        },
+        [theme.breakpoints.up("sm")]: {
+            maxWidth: " 600px",
+            paddingLeft: "54px",
+           
+        },
+        [theme.breakpoints.up("md")]: {
+            maxWidth: " 960px",
+            paddingLeft: "60px",
+        },
+    },
+}))
 
 function App() {
-    // const classes = useStyles();
-    // const [state, setState] = useState({ isShow: true });
-
-    // const onLogin = () => {
-    //   let isShow = !state.isShow;
-    //   setState({ isShow });
-    // };
+    const classes = useStyles()
 
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
 
     const [stateUsers, setUsers] = useState(USERS_LOCAL_STORAGE)
     const [valueUser, setValueUser] = useState({ value: "" })
     const [valueTodo, setValueTodor] = useState({ value: "" })
-    // useEffect(() => {
-    //   setUsers(store);
-    // });
+
     useEffect(() => {
         console.log("use effect")
         getUsersFromFairbase()
@@ -197,33 +207,19 @@ function App() {
             return user.id_user === idUser
         })
         user.tasks.splice(id, 1)
-        // let userTasks = user.tasks.filter((task) => {
-        //   return task.id_task !== idTask;
-        // });
 
-        // user.tasks = userTasks;
         users.push(user)
         let arrUsers = users.filter((user, pos) => {
-            // console.log(users.indexOf(user), pos);
             return users.indexOf(user) === pos
         })
-        console.log(users)
-        console.log(user)
-        // Object.assign(user, users);
 
-        // let tasks = userTasks.filter((task) => {
-        //   return task.id_task !== id_task;
-        // });
-        // user.tasks = tasks;
-        // users[id_user] = user;
         postUsertoFirebase(arrUsers)
         setUsers(arrUsers)
         localStorage.setItem("users", JSON.stringify(arrUsers))
-        // setValueUser({ value: "" });
     }
 
     return (
-        <Container maxWidth="md">
+        <Container className={classes.root}>
             <MiniDrawer />
             <Switch>
                 <Route exact path="/" component={Home} />
