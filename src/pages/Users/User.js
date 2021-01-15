@@ -12,6 +12,14 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import PersonOutlineTwoToneIcon from "@material-ui/icons/PersonOutlineTwoTone"
 
 const useStyles = makeStyles((theme) => ({
+    navLink: {
+        display: "flex",
+        flexGrow: 1,
+        justifyContent: " space - between",
+        textAlign: "center",
+        textDecoration: " none",
+       
+    },
     button: {
         margin: 8,
     },
@@ -26,6 +34,20 @@ const useStyles = makeStyles((theme) => ({
     item: {
         flex: "0 auto",
     },
+    textField: {
+        [theme.breakpoints.up("xs")]: {
+            margin: 8,
+            fontSize: ".7rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            margin: 8,
+            fontSize: ".9rem",
+        },
+        [theme.breakpoints.up("md")]: {
+            margin: 8,
+            fontSize: "1rem",
+        },
+    },
 }))
 
 function User({ users, deleteUser }) {
@@ -36,12 +58,12 @@ function User({ users, deleteUser }) {
         return (
             <div key={i}>
                 <ListItem button key={i}>
-                    <NavLink className="nav-link" to={"/users/" + parseInt(user.id_user)}>
+                    <NavLink className={classes.navLink} to={"/users/" + parseInt(user.id_user)}>
                         <ListItemText className={classes.item} primary={i + 1} />
                         <PersonOutlineTwoToneIcon className={classes.icon} />
-                        <ListItemText primary={user.user_name} />
-                        <ListItemText primary={user.time} />
-                        <ListItemText primary={user.countTask} />
+                        <ListItemText className={classes.textField} primary={user.user_name} />
+                        <ListItemText className={classes.textField} primary={user.countTask} />
+                        <ListItemText className={classes.textField} primary={user.time} />
                     </NavLink>
 
                     <Button

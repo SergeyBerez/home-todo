@@ -17,10 +17,27 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 70,
     },
     textField: {
-        width: "85%",
-        margin: 8,
+        [theme.breakpoints.up("xs")]: {
+            margin: 8,
+            fontSize: ".7rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            margin: 8,
+            fontSize: ".9rem",
+        },
+        [theme.breakpoints.up("md")]: {
+            margin: 8,
+            fontSize: "1rem",
+        },
     },
     button: {
+        [theme.breakpoints.up("xs")]: {
+            margin: 8,
+            fontSize: ".7rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            margin: 8,
+        },
         margin: theme.spacing(1),
     },
 }))
@@ -36,11 +53,11 @@ export default function List(props) {
     return (
         <>
             <ListItem className={classes.root}>
-                <Typography>{props.id + 1}</Typography>
+                <Typography className={classes.textField}>{props.id + 1}</Typography>
 
-                <Typography>{props.title}</Typography>
+                <Typography className={classes.textField}>{props.title}</Typography>
 
-                <Typography>{props.time}</Typography>
+                <Typography className={classes.textField}>{props.time}</Typography>
                 <div>
                     <Button
                         onClick={toggleModal}

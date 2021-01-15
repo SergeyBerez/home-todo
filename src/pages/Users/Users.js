@@ -18,12 +18,32 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 70,
     },
     textField: {
-        width: "70%",
-        margin: 8,
+        [theme.breakpoints.up("xs")]: {
+            width: "90%",
+            margin: 8,
+        },
+        [theme.breakpoints.up("sm")]: {
+            width: "90%",
+            margin: 8,
+        },
+        [theme.breakpoints.up("md")]: {
+            width: "90%",
+            margin: 8,
+        },
     },
     button: {
-        margin: theme.spacing(1),
-        fontSize: "1rem",
+        [theme.breakpoints.up("xs")]: {
+            fontSize: ".7rem",
+            margin: theme.spacing(1),
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: "0.7rem",
+            margin: theme.spacing(1),
+        },
+        [theme.breakpoints.up("md")]: {
+            fontSize: "1rem",
+            margin: theme.spacing(1),
+        },
     },
 }))
 

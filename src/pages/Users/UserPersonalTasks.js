@@ -15,12 +15,30 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 70,
     },
     textField: {
-        width: "70%",
-        margin: 8,
+        [theme.breakpoints.up("xs")]: {
+            width: "85%",
+            margin: 8,
+        },
+        [theme.breakpoints.up("sm")]: {
+            width: "85%",
+            margin: 8,
+        },
+        [theme.breakpoints.up("md")]: {
+            width: "85%",
+            margin: 8,
+        },
     },
     button: {
-        margin: theme.spacing(1),
-        fontSize: "1rem",
+        [theme.breakpoints.up("xs")]: {
+            fontSize: ".7rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: "0.7rem",
+        },
+        [theme.breakpoints.up("md")]: {
+            fontSize: "1rem",
+            margin: theme.spacing(1),
+        },
     },
 }))
 
@@ -74,35 +92,36 @@ const UserPersonalTasks = (props) => {
                     </>
                 )}
             </Alert>
-            <TextField
-                id="standard-full-width"
-                label="Enter task"
-                className={classes.textField}
-                placeholder="name task"
-                helperText=""
-                margin="normal"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                type="text"
-                value={props.valueUser}
-                onKeyUp={(e) => {
-                    props.keyHandle(e, parseInt(props.history.match.params.id), user.tasks.length)
-                }}
-                onChange={(e) => {
-                    props.changeTitleUserTask(e.target.value)
-                }}
-                type="text"></TextField>
-            <Button
-                onClick={() => {
-                    props.addTodoTaskUser(parseInt(props.history.match.params.id), user.tasks.length)
-                }}
-                disabled={props.users.length === 0}
-                variant="contained"
-                className={classes.button}>
-                ADD TASK
-            </Button>
-
+            <div className={classes.root}>
+                <TextField
+                    id="standard-full-width"
+                    label="Enter task"
+                    className={classes.textField}
+                    placeholder="name task"
+                    helperText=""
+                    margin="normal"
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    type="text"
+                    value={props.valueUser}
+                    onKeyUp={(e) => {
+                        props.keyHandle(e, parseInt(props.history.match.params.id), user.tasks.length)
+                    }}
+                    onChange={(e) => {
+                        props.changeTitleUserTask(e.target.value)
+                    }}
+                    type="text"></TextField>
+                <Button
+                    onClick={() => {
+                        props.addTodoTaskUser(parseInt(props.history.match.params.id), user.tasks.length)
+                    }}
+                    disabled={props.users.length === 0}
+                    variant="contained"
+                    className={classes.button}>
+                    ADD TASK
+                </Button>
+            </div>
             <List>{RenderUserTask} </List>
             {/* {user.tasks.length === 0 ? <p>добавьте user</p> : null} */}
         </div>

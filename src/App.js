@@ -22,12 +22,9 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.up("sm")]: {
             maxWidth: " 600px",
-            paddingLeft: "54px",
-           
         },
         [theme.breakpoints.up("md")]: {
             maxWidth: " 960px",
-            paddingLeft: "60px",
         },
     },
 }))
