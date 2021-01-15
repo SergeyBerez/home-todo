@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function Users(props) {
     const classes = useStyles()
     // props.value.length > 2? <h3>
-    console.log("================render ===== users", props)
+    console.log("================render ===== users", props.users)
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.root}>

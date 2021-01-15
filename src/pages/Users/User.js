@@ -22,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
     },
     icon: {
         fontSize: "2rem",
-  },
-  item: {
-      flex:"0 auto"
-    }
+    },
+    item: {
+        flex: "0 auto",
+    },
 }))
 
 function User({ users, deleteUser }) {
+    console.log(users)
     const classes = useStyles()
 
     return users.map((user, i) => {
