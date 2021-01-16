@@ -1,13 +1,15 @@
-import Modal from "../../components/modalEdit"
+// import Modal from "../../components/modalEdit"
 import React, { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import ListItem from "@material-ui/core/ListItem"
-import ListItemText from "@material-ui/core/ListItemText"
+
 import DeleteIcon from "@material-ui/icons/Delete"
 import Divider from "@material-ui/core/Divider"
 import EditIcon from "@material-ui/icons/Edit"
 import Typography from "@material-ui/core/Typography"
+import { ModalEdit } from "../../components/ModaForlEdit"
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     header: {
         marginTop: 70,
     },
-    textField: {
+    typography: {
         [theme.breakpoints.up("xs")]: {
             margin: 8,
             fontSize: ".7rem",
@@ -40,30 +42,39 @@ const useStyles = makeStyles((theme) => ({
         },
         margin: theme.spacing(1),
     },
+    form: {
+        position: "fixed",
+        width: "200px",
+        height: "200px",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+
+        display: "flex",
+        justifyContent: "space-between",
+    },
 }))
 
 export default function List(props) {
     const classes = useStyles()
-    const [state, setState] = useState(false)
-    const toggleModal = () => {
-        setState(!state)
+    const [openModal, setOpenModal] = useState(false)
+    const showModal = () => {
+        setOpenModal(true)
+        console.log("coloseModal")
     }
-
-    // console.log("======render list", props);
+    const closeModal = () => {
+        console.log("showModal")
+        setOpenModal(false)
+    }
+    console.log("======render list", { props })
     return (
         <>
             <ListItem className={classes.root}>
-                <Typography className={classes.textField}>{props.id + 1}</Typography>
-
-                <Typography className={classes.textField}>{props.title}</Typography>
-
-                <Typography className={classes.textField}>{props.time}</Typography>
+                <Typography className={classes.typography}>{props.title}</Typography>
+                <Typography className={classes.typography}>{props.id + 1}</Typography>
+                <Typography className={classes.typography}>{props.time}</Typography>
                 <div>
-                    <Button
-                        onClick={toggleModal}
-                        variant="contained"
-                        className={classes.button}
-                        startIcon={<EditIcon />}>
+                    <Button onClick={showModal} variant="contained" className={classes.button} startIcon={<EditIcon />}>
                         edit
                     </Button>
                     <Button
@@ -78,51 +89,10 @@ export default function List(props) {
                         DELL
                     </Button>
                 </div>
-                {/* {state ? (
-                    <Modal
-                        id_user={props.id_user}
-                        id_task={props.id_task}
-                        title={props.title}
-                        value={props.value}
-                        editTask={props.editTask}
-                        changeTitlebyModal={props.changeTitlebyModal}
-                        toggleModal={toggleModal}
-                    />
-                ) : null} */}
             </ListItem>
+
             <Divider />
+            <ModalEdit user={props} show={openModal} closeModal={closeModal}></ModalEdit>
         </>
     )
 }
-
-// export default function list({ nameTask, id }) {
-//   const [modal, showModal] = useState(true);
-//   function toggleModal() {
-//     showModal(!modal);
-//   }
-//   return (
-//     <li className="list-group-item  userTasksLi">
-//       <div className="">
-//         <i className="fas fa-thumbtack"></i>
-//         <span>
-//           {nameTask} {id}
-//         </span>
-//       </div>
-//       <div>
-//         <Modal nameTask={nameTask} />
-
-//         <button
-//           toggleModal={toggleModal}
-//           type="button"
-//           className="btn btn-outline-warning"
-//         >
-//           <i className="fas fa-edit"></i>
-//         </button>
-
-//         <button type="button" className="btn btn-outline-danger">
-//           <i className="fas fa-trash-alt"></i>
-//         </button>
-//       </div>
-//     </li>
-//   );
-// }

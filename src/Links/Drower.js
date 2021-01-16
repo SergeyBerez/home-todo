@@ -145,7 +145,7 @@ const MiniDrawer = () => {
                     {links.map((text, index) => (
                         <ListItem button key={index}>
                             <ListItemIcon>
-                                <NavLink exact to={text.link} className={classes.link}>
+                                <NavLink onClick={handleDrawerClose} exact to={text.link} className={classes.link}>
                                     <LinkIcon />
                                 </NavLink>
                             </ListItemIcon>

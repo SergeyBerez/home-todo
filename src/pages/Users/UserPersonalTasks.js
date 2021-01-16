@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import TextField from "@material-ui/core/TextField"
 import Alert from "@material-ui/lab/Alert"
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -77,7 +78,7 @@ const UserPersonalTasks = (props) => {
             )
         })
     }
-
+    // ==============UserPersonalTasks render user tasks
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.root}>
@@ -123,7 +124,7 @@ const UserPersonalTasks = (props) => {
                 </Button>
             </div>
             <List>{RenderUserTask} </List>
-            {/* {user.tasks.length === 0 ? <p>добавьте user</p> : null} */}
+           
         </div>
     )
 }

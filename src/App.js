@@ -152,24 +152,31 @@ function App() {
         }
     }
     const editTask = (id_user, id_task) => {
-        console.log(id_user, id_task)
         let users = [...stateUsers]
-        let user = { ...users[id_user] }
-        let userTasks = [...users[id_user].tasks]
-        console.log(userTasks)
+        let user = users.find((params) => {
+            return params.id_user === id_user
+        })
+        let userTasks = [...user.tasks]
 
-        let tasks = userTasks.map((item) => {
+        userTasks.map((item) => {
             if (item.id_task === id_task) {
                 item.title = valueTodo.value
             }
             return item
         })
-        userTasks = tasks
-        user.tasks = userTasks
-        users[id_user] = user
 
-        setUsers({ ...users })
-        localStorage.setItem("users", JSON.stringify({ ...users }))
+        // userTasks = tasks
+        user.tasks = userTasks
+
+        users.map((params) => {
+            if (id_user === params.id_user) {
+                params = user
+            }
+            return params
+        })
+        console.log(users)
+        setUsers(users)
+        localStorage.setItem("users", JSON.stringify(users))
         setValueTodor({ value: "" })
     }
     // const changeChecked = (e, i) => {
