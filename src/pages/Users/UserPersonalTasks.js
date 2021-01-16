@@ -5,16 +5,24 @@ import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 import TextField from "@material-ui/core/TextField"
 import Alert from "@material-ui/lab/Alert"
-
+import { NavLink } from "react-router-dom"
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace"
+import IconButton from "@material-ui/core/IconButton"
 
 const useStyles = makeStyles((theme) => ({
+    navLink: {
+        display: "flex",
+        flexGrow: 1,
+        justifyContent: " space - between",
+        textAlign: "center",
+        textDecoration: " none",
+    },
     root: {
         display: "flex",
         justifyContent: "space-between",
-    },
-    header: {
         marginTop: 70,
     },
+
     textField: {
         [theme.breakpoints.up("xs")]: {
             width: "85%",
@@ -82,7 +90,11 @@ const UserPersonalTasks = (props) => {
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.root}>
-                {" "}
+                <NavLink className={classes.navLink} to={"/users/"}>
+                    <IconButton>
+                        <KeyboardBackspaceIcon></KeyboardBackspaceIcon>
+                    </IconButton>
+                </NavLink>
                 {RenderUserTask === undefined ? (
                     <h1>at firs add user</h1>
                 ) : (
@@ -124,7 +136,6 @@ const UserPersonalTasks = (props) => {
                 </Button>
             </div>
             <List>{RenderUserTask} </List>
-           
         </div>
     )
 }
