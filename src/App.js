@@ -226,7 +226,14 @@ function App() {
         <Container className={classes.root}>
             <MiniDrawer />
             <Switch>
-                <Route exact path="/" component={Home} />
+                <Route
+                    exact
+                    path="/"
+                    render={() => {
+                        return <Home users={stateUsers} />
+                    }}
+                />
+
                 <Route
                     exact
                     path="/users"
@@ -239,7 +246,8 @@ function App() {
                             value={valueUser.value}
                             deleteUser={deleteUser}
                         />
-                    )}></Route>
+                    )}
+                />
                 <Route
                     path="/users/:id"
                     render={(e) => (
@@ -257,7 +265,7 @@ function App() {
                         />
                     )}
                 />
-                <Route path="/about" component={About}></Route>
+                <Route path="/about" component={About} />
                 <Redirect to="/"></Redirect>
                 <Route
                     render={() => {
