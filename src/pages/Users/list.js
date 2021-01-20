@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
         justifyContent: "space-between",
+        flexWrap: "wrap",
     },
     header: {
         marginTop: 70,
@@ -32,15 +33,38 @@ const useStyles = makeStyles((theme) => ({
             fontSize: "1rem",
         },
     },
-    button: {
+    boxButton: {
         [theme.breakpoints.up("xs")]: {
             margin: 8,
-            fontSize: ".7rem",
+            fontSize: ".5rem",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
         },
         [theme.breakpoints.up("sm")]: {
             margin: 8,
+            fontSize: ".7rem",
+            width: "100%",
+            textAlign: "right",
         },
-        margin: theme.spacing(1),
+        [theme.breakpoints.up("md")]: {
+            margin: 8,
+            fontSize: "1rem",
+            width: "25%",
+            display: "flex",
+            // justifyContent: "space-between",
+        },
+    },
+    button: {
+        [theme.breakpoints.up("xs")]: {
+            fontSize: ".5rem",
+        },
+        [theme.breakpoints.up("sm")]: {
+            fontSize: ".7rem",
+        },
+        [theme.breakpoints.up("md")]: {
+            fontSize: "1rem",
+        },
     },
     form: {
         position: "fixed",
@@ -70,10 +94,13 @@ export default function List(props) {
     return (
         <>
             <ListItem className={classes.root}>
-                <Typography className={classes.typography}>{props.title}</Typography>
-                <Typography className={classes.typography}>{props.id + 1}</Typography>
+                <Typography className={classes.typography}>
+                    {props.id + 1}&#8195;
+                    {props.title}
+                </Typography>
+
                 <Typography className={classes.typography}>{props.time}</Typography>
-                <div>
+                <div className={classes.boxButton}>
                     <Button onClick={showModal} variant="contained" className={classes.button} startIcon={<EditIcon />}>
                         edit
                     </Button>
@@ -90,9 +117,8 @@ export default function List(props) {
                     </Button>
                 </div>
             </ListItem>
-
-            <Divider />
             <ModalEdit user={props} show={openModal} closeModal={closeModal}></ModalEdit>
+            <Divider />
         </>
     )
 }

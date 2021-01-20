@@ -12,40 +12,73 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import PersonOutlineTwoToneIcon from "@material-ui/icons/PersonOutlineTwoTone"
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+    },
     navLink: {
         display: "flex",
         flexGrow: 1,
         justifyContent: " space - between",
         textAlign: "center",
         textDecoration: " none",
-       
     },
     button: {
-        margin: 8,
-    },
-    li: {
-        display: "flex",
-        justifyContent: "space-between",
-        textAlign: "center",
-    },
-    icon: {
-        fontSize: "2rem",
-    },
-    item: {
-        flex: "0 auto",
-    },
-    textField: {
         [theme.breakpoints.up("xs")]: {
             margin: 8,
             fontSize: ".7rem",
         },
         [theme.breakpoints.up("sm")]: {
             margin: 8,
+
             fontSize: ".9rem",
         },
         [theme.breakpoints.up("md")]: {
             margin: 8,
             fontSize: "1rem",
+        },
+    },
+    divMedia: {
+        [theme.breakpoints.up("xs")]: {
+            margin: 8,
+            fontSize: ".7rem",
+            width: "100%",
+            textAlign: "center",
+        },
+        [theme.breakpoints.up("sm")]: {
+            margin: 8,
+            width: "20%",
+            fontSize: ".9rem",
+            textAlign: "right",
+        },
+        [theme.breakpoints.up("md")]: {
+            margin: 8,
+            fontSize: "1rem",
+        },
+    },
+
+    icon: {
+        fontSize: "2rem",
+    },
+    item: {
+        flex: "0 auto",
+    },
+    ListItemText: {
+        marginLeft: "auto",
+        "& span": {
+            [theme.breakpoints.up("xs")]: {
+                margin: 8,
+                fontSize: ".5rem",
+            },
+            [theme.breakpoints.up("sm")]: {
+                margin: 8,
+                fontSize: ".7rem",
+            },
+            [theme.breakpoints.up("md")]: {
+                margin: 8,
+                fontSize: ".8rem",
+            },
         },
     },
 }))
@@ -57,25 +90,27 @@ function User({ users, deleteUser }) {
     return users.map((user, i) => {
         return (
             <div key={i}>
-                <ListItem button key={i}>
+                <ListItem button className={classes.root}>
                     <NavLink className={classes.navLink} to={"/users/" + parseInt(user.id_user)}>
                         <ListItemText className={classes.item} primary={i + 1} />
+                        &#8195;
                         <PersonOutlineTwoToneIcon className={classes.icon} />
-                        <ListItemText className={classes.textField} primary={user.user_name} />
-                        <ListItemText className={classes.textField} primary={user.countTask} />
-                        <ListItemText className={classes.textField} primary={user.time} />
+                        &#8195;
+                        <ListItemText primary={user.user_name} />
+                        <ListItemText className={classes.ListItemText} primary={user.time} />
                     </NavLink>
-
-                    <Button
-                        onClick={() => {
-                            deleteUser(i)
-                        }}
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button}
-                        startIcon={<DeleteIcon />}>
-                        Delete
-                    </Button>
+                    <div className={classes.divMedia}>
+                        <Button
+                            onClick={() => {
+                                deleteUser(i)
+                            }}
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                            startIcon={<DeleteIcon />}>
+                            Delete
+                        </Button>
+                    </div>
                 </ListItem>
                 <Divider />
             </div>

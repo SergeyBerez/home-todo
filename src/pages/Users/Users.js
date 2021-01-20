@@ -10,31 +10,38 @@ import User from "./User"
 import PeopleAltTwoToneIcon from "@material-ui/icons/PeopleAltTwoTone"
 
 const useStyles = makeStyles((theme) => ({
+    Alert: {
+        marginTop: 70,
+        "& div": {
+            display: "flex",
+
+            alignItems: "center",
+        },
+    },
     root: {
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "center",
+        flexWrap: "wrap",
     },
-    header: {
-        marginTop: 70,
-    },
+
     textField: {
         [theme.breakpoints.up("xs")]: {
-            width: "90%",
+            width: "100%",
             margin: 8,
         },
         [theme.breakpoints.up("sm")]: {
-            width: "90%",
+            width: "80%",
             margin: 8,
         },
         [theme.breakpoints.up("md")]: {
-            width: "90%",
+            width: "80%",
             margin: 8,
         },
     },
     button: {
         [theme.breakpoints.up("xs")]: {
             fontSize: ".7rem",
-            margin: theme.spacing(1),
+            margin: 4,
         },
         [theme.breakpoints.up("sm")]: {
             fontSize: "0.7rem",
@@ -50,20 +57,23 @@ const useStyles = makeStyles((theme) => ({
 function Users(props) {
     const classes = useStyles()
     // props.value.length > 2? <h3>
-    console.log("================render ===== users", props.users)
+    console.log("================render ===== users", props.value.length > 3)
     return (
         <div className={classes.header}>
-            <Alert icon={false} severity="info" className={classes.root}>
-                <PeopleAltTwoToneIcon /> &nbsp;
+            <Alert icon={false} severity="info" className={classes.Alert}>
+                <span>{Object.keys(props.users).length}</span>&#8195;
+                <PeopleAltTwoToneIcon /> &#8195;
                 {Object.keys(props.users).length !== 0 ? (
-                    <>
-                        &nbsp; <p>all users</p> &nbsp; &nbsp;
-                        <span>{Object.keys(props.users).length}</span>
-                    </>
+                    <p> &#8195;ALL USERS&#8195;</p>
                 ) : (
                     <>
-                        <span>not users add user</span>
+                        &#8195;<span>NOT USER</span>&#8195;
                     </>
+                )}
+                {props.value.length > 3 ? (
+                    <span>User name&#8195;{props.value}</span>
+                ) : (
+                    <span>Enter name more 3 letters</span>
                 )}
             </Alert>
 
@@ -86,7 +96,7 @@ function Users(props) {
                     type="text"
                 />
                 <Button onClick={props.addUser} variant="contained" className={classes.button}>
-                    ADD USER
+                    ADD&nbsp;USER
                 </Button>
             </div>
             <List>

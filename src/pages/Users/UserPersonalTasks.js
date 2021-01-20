@@ -11,27 +11,35 @@ import IconButton from "@material-ui/core/IconButton"
 
 const useStyles = makeStyles((theme) => ({
     navLink: {
-        display: "flex",
-        flexGrow: 1,
-        justifyContent: " space - between",
-        textAlign: "center",
-        textDecoration: " none",
+        // display: "flex",
+        // flexGrow: 1,
+        // justifyContent: "space-between",
+        // textAlign: "center",
+        // textDecoration: " none",
     },
-    root: {
+    Alert: {
         display: "flex",
         justifyContent: "space-between",
         marginTop: 70,
+        "& div": {
+            display: "flex",
+            width: "50%",
+            alignItems: "center",
+            justifyContent: "space-between",
+        },
+    },
+    root: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
     },
 
     textField: {
         [theme.breakpoints.up("xs")]: {
-            width: "85%",
+            width: "100%",
             margin: 8,
         },
-        [theme.breakpoints.up("sm")]: {
-            width: "85%",
-            margin: 8,
-        },
+
         [theme.breakpoints.up("md")]: {
             width: "85%",
             margin: 8,
@@ -41,9 +49,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up("xs")]: {
             fontSize: ".7rem",
         },
-        [theme.breakpoints.up("sm")]: {
-            fontSize: "0.7rem",
-        },
+
         [theme.breakpoints.up("md")]: {
             fontSize: "1rem",
             margin: theme.spacing(1),
@@ -89,19 +95,19 @@ const UserPersonalTasks = (props) => {
     // ==============UserPersonalTasks render user tasks
     return (
         <div className={classes.header}>
-            <Alert icon={false} severity="info" className={classes.root}>
+            <Alert icon={false} severity="info" className={classes.Alert}>
                 <NavLink className={classes.navLink} to={"/users/"}>
                     <IconButton>
                         <KeyboardBackspaceIcon></KeyboardBackspaceIcon>
                     </IconButton>
                 </NavLink>
                 {RenderUserTask === undefined ? (
-                    <h1>at firs add user</h1>
+                    <p1>at firs add user</p1>
                 ) : (
                     <>
-                        <h2>{user.user_name}</h2>
+                        <p>{user.user_name}</p>
                         &nbsp;
-                        <h3>tasks &nbsp;{user.tasks.length}</h3>
+                        <p>tasks &nbsp;{user.tasks.length}</p>
                     </>
                 )}
             </Alert>
@@ -132,7 +138,7 @@ const UserPersonalTasks = (props) => {
                     disabled={props.users.length === 0}
                     variant="contained"
                     className={classes.button}>
-                    ADD TASK
+                    ADD&nbsp;TASK
                 </Button>
             </div>
             <List>{RenderUserTask} </List>

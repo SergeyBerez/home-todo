@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 const links = [
     {
         title: "home",
-        link: "/",
+        link: "/todo-material-firebase",
     },
     {
         title: "users",

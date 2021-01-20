@@ -8,11 +8,12 @@ ul {
 }
 
 .MuiAlert-message {
-    display: flex;
+    /* display: flex;
     width: 50%;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; */
 }
+
 
 /* .block-users-links {
   display: flex;

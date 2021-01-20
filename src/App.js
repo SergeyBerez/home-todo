@@ -93,6 +93,7 @@ function App() {
             setValueUser({ value: "" })
             postUsertoFirebase(newUser)
         } else {
+            console.log("change title")
         }
     }
     const changeTitleUserTask = (value) => {
@@ -228,7 +229,7 @@ function App() {
             <Switch>
                 <Route
                     exact
-                    path="/"
+                    path="/todo-material-firebase"
                     render={() => {
                         return <Home users={stateUsers} />
                     }}
@@ -266,7 +267,7 @@ function App() {
                     )}
                 />
                 <Route path="/about" component={About} />
-                <Redirect to="/"></Redirect>
+                <Redirect to="/todo-material-firebase"></Redirect>
                 <Route
                     render={() => {
                         return <h1 style={{ color: "red" }}> 404 not found page...</h1>
