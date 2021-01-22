@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/todo-material-firebase/static/css/main.1d1884c5.chunk.css",
-    "main.js": "/todo-material-firebase/static/js/main.228b20ce.chunk.js",
-    "main.js.map": "/todo-material-firebase/static/js/main.228b20ce.chunk.js.map",
+    "main.css": "/todo-material-firebase/static/css/main.9d4c7d3b.chunk.css",
+    "main.js": "/todo-material-firebase/static/js/main.833ce990.chunk.js",
+    "main.js.map": "/todo-material-firebase/static/js/main.833ce990.chunk.js.map",
     "runtime-main.js": "/todo-material-firebase/static/js/runtime-main.e0d56b6b.js",
     "runtime-main.js.map": "/todo-material-firebase/static/js/runtime-main.e0d56b6b.js.map",
-    "static/js/2.78d7123d.chunk.js": "/todo-material-firebase/static/js/2.78d7123d.chunk.js",
-    "static/js/2.78d7123d.chunk.js.map": "/todo-material-firebase/static/js/2.78d7123d.chunk.js.map",
+    "static/js/2.ec084e41.chunk.js": "/todo-material-firebase/static/js/2.ec084e41.chunk.js",
+    "static/js/2.ec084e41.chunk.js.map": "/todo-material-firebase/static/js/2.ec084e41.chunk.js.map",
     "index.html": "/todo-material-firebase/index.html",
-    "static/css/main.1d1884c5.chunk.css.map": "/todo-material-firebase/static/css/main.1d1884c5.chunk.css.map",
-    "static/js/2.78d7123d.chunk.js.LICENSE.txt": "/todo-material-firebase/static/js/2.78d7123d.chunk.js.LICENSE.txt"
+    "static/css/main.9d4c7d3b.chunk.css.map": "/todo-material-firebase/static/css/main.9d4c7d3b.chunk.css.map",
+    "static/js/2.ec084e41.chunk.js.LICENSE.txt": "/todo-material-firebase/static/js/2.ec084e41.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.e0d56b6b.js",
-    "static/js/2.78d7123d.chunk.js",
-    "static/css/main.1d1884c5.chunk.css",
-    "static/js/main.228b20ce.chunk.js"
+    "static/js/2.ec084e41.chunk.js",
+    "static/css/main.9d4c7d3b.chunk.css",
+    "static/js/main.833ce990.chunk.js"
   ]
 }
