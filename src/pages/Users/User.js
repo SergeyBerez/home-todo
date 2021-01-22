@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function User({ users, deleteUser }) {
-    console.log(users)
+ 
     const classes = useStyles()
 
     return users.map((user, i) => {
@@ -102,7 +102,7 @@ function User({ users, deleteUser }) {
                     <div className={classes.divMedia}>
                         <Button
                             onClick={() => {
-                                deleteUser(i)
+                                deleteUser(i, user.id_user)
                             }}
                             variant="contained"
                             color="secondary"

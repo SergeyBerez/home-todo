@@ -18,11 +18,15 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import LinkIcon from "@material-ui/icons/Link"
 
+import Auth from "../Auth/Auth"
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
+    },
+    flexGrow: {
+        flexGrow: 1,
     },
     appBar: {
         transition: theme.transitions.create(["margin", "width"], {
@@ -91,7 +95,7 @@ const links = [
     },
 ]
 
-const MiniDrawer = () => {
+const MiniDrawer = ({ auth }) => {
     const classes = useStyles()
     const theme = useTheme()
     const [open, setOpen] = React.useState(false)
@@ -114,6 +118,7 @@ const MiniDrawer = () => {
                 })}>
                 <Toolbar>
                     <IconButton
+                        // disabled='true'
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
@@ -121,9 +126,10 @@ const MiniDrawer = () => {
                         className={clsx(classes.menuButton, open && classes.hide)}>
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography className={classes.flexGrow} variant="h6" noWrap>
                         Menu
                     </Typography>
+                    <Auth auth={auth}></Auth>
                 </Toolbar>
             </AppBar>
             <Drawer

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home({ users }) {
     const classes = useStyles()
-    console.log(users)
+    
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
@@ -45,7 +45,7 @@ export default function Home({ users }) {
                 </TableHead>
                 <TableBody>
                     {users.map((row) => (
-                        <TableRow key={row.id}>
+                        <TableRow key={row.id_user}>
                             <TableCell className={classes.th} component="th" scope="row">
                                 {row.user_name}
                             </TableCell>
