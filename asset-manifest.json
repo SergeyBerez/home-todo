@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/todo-material-firebase/static/css/main.9d4c7d3b.chunk.css",
-    "main.js": "/todo-material-firebase/static/js/main.cbf71ed3.chunk.js",
-    "main.js.map": "/todo-material-firebase/static/js/main.cbf71ed3.chunk.js.map",
+    "main.js": "/todo-material-firebase/static/js/main.69c3c08b.chunk.js",
+    "main.js.map": "/todo-material-firebase/static/js/main.69c3c08b.chunk.js.map",
     "runtime-main.js": "/todo-material-firebase/static/js/runtime-main.e0d56b6b.js",
     "runtime-main.js.map": "/todo-material-firebase/static/js/runtime-main.e0d56b6b.js.map",
     "static/js/2.bd7583ab.chunk.js": "/todo-material-firebase/static/js/2.bd7583ab.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.e0d56b6b.js",
     "static/js/2.bd7583ab.chunk.js",
     "static/css/main.9d4c7d3b.chunk.css",
-    "static/js/main.cbf71ed3.chunk.js"
+    "static/js/main.69c3c08b.chunk.js"
   ]
 }
