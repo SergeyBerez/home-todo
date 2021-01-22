@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     h3: {
-        marginTop: 70,
+        marginTop: 130,
+        marginLeft: 30,
     },
 }))
 
@@ -134,7 +135,6 @@ function App() {
         }
     }
     const keyHandleInputTask = (e, id_user, count_task) => {
-        console.log("keyHandleInputTask", id_user, count_task)
         if (e.keyCode === 13 && valueUser.value.length > 2) {
             addTodoTaskUser(id_user, count_task)
         }
@@ -225,8 +225,6 @@ function App() {
         users.push(user)
         console.log(users)
         let uniqueUsers = users.filter((user, pos) => {
-            console.log(user, pos)
-            console.log("users indexOf", users.indexOf(user))
             return users.indexOf(user) === pos
         })
         postUsertoFirebase(user)

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 export const ModalEdit = ({ user, show, closeModal }) => {
     const classes = useStyles()
 
-    console.log("=======render modal", user)
+   
     return (
         <div className={show ? classes.root : classes.hideModal}>
             <div className={classes.headerButton}>

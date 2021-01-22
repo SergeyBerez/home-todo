@@ -90,7 +90,7 @@ export default function List(props) {
         console.log("showModal")
         setOpenModal(false)
     }
-    console.log("======render list", { props })
+    
     return (
         <>
             <ListItem className={classes.root}>
