@@ -1,26 +1,37 @@
 import React, { useState, useEffect, useContext } from "react"
-import firebase from "../Firebase/firebaseConfig"
+import _firebase from "../Firebase/firebaseConfig"
 import TextField from "@material-ui/core/TextField"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
-import Context from "../Context/Context"
+import Typography from "@material-ui/core/Typography"
+import Popover from "@material-ui/core/Popover"
+import { _Context } from "../Context/Context.js"
 
 const useStyles = makeStyles((theme) => ({
+    typography: {
+        fontSize: "0.7rem",
+    },
     form: {
         display: "flex",
         justifyContent: "center",
-        flexWrap: "wrap",
+        padding: 2,
+
+        [theme.breakpoints.up("xs")]: {
+            flexWrap: "wrap",
+        },
+        [theme.breakpoints.up("sm")]: {},
+        [theme.breakpoints.up("md")]: { flexWrap: "nowrap" },
     },
     input: {
         [theme.breakpoints.up("xs")]: {
             width: "100%",
             "& input": {
-                padding: "10px 10px",
+                padding: "13px 10px",
                 // fontSize: "0.5rem",
             },
         },
         [theme.breakpoints.up("sm")]: {
-            width: "30%",
+            width: "100%",
             "& input": {
                 padding: "13px 15px",
             },
@@ -36,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AuthUser = () => {
     const classes = useStyles()
-    const { auth, authisLogged, authIsExit } = useContext(Context)
+    const { auth, authisLogged, authIsExit } = useContext(_Context)
     const [messageFirebase, SetmessageFirebase] = useState("")
     const [valueInputs, SetvalutInputs] = useState({ email: "", password: "" })
     const onHandleInputs = (e) => {
@@ -45,13 +56,24 @@ const AuthUser = () => {
             [e.target.type]: e.target.value,
         })
     }
+    const [anchorEl, setAnchorEl] = React.useState(null)
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+    const open = Boolean(anchorEl)
+    const id = open ? "simple-popover" : undefined
     useEffect(() => {}, [])
     const createUserInFirebase = (e) => {
         e.preventDefault()
         const { email, password } = valueInputs
         console.log(valueInputs)
-        firebase
+        _firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((data) => {
@@ -80,7 +102,7 @@ const AuthUser = () => {
     const onLogInAuthHandle = (e) => {
         e.preventDefault()
         const { email, password } = valueInputs
-        firebase
+        _firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
             .then((data) => {
@@ -113,44 +135,66 @@ const AuthUser = () => {
         <div>
             {auth ? (
                 <div>
-                    <p> {messageFirebase}</p>
+                    <Typography className={classes.typography}>{messageFirebase}</Typography>
+
                     <Button value="exit" color="inherit" onClick={authExit}>
                         exit
                     </Button>
                 </div>
             ) : (
-                <form className={classes.form}>
-                    {messageFirebase}
-                    <TextField
-                        className={classes.input}
-                        id="outlined-Email-input"
-                        label="email"
-                        value={valueInputs.email}
-                        type="Email"
-                        autoComplete="current-password"
-                        variant="outlined"
-                        onChange={onHandleInputs}
-                        color="secondary"
-                    />
-                    <TextField
-                        className={classes.input}
-                        id="outlined-password-input"
-                        label="password"
-                        value={valueInputs.password}
-                        type="password"
-                        autoComplete="current-password"
-                        variant="outlined"
-                        onChange={onHandleInputs}
-                        color="secondary"
-                    />
-
-                    <Button type="submit" value="login" color="inherit" onClick={onLogInAuthHandle}>
-                        Login
+                <div>
+                    <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
+                        Enter/Register
                     </Button>
-                    <Button type="submit" value="signIn" color="inherit" onClick={createUserInFirebase}>
-                        Sign Up
-                    </Button>
-                </form>
+                    <Popover
+                        id={id}
+                        open={open}
+                        anchorEl={anchorEl}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center",
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center",
+                        }}>
+                        <form className={classes.form}>
+                            <fieldset>
+                                Register
+                                <Typography className={classes.typography}>{messageFirebase}</Typography>
+                                <TextField
+                                    className={classes.input}
+                                    id="outlined-Email-input"
+                                    label="email"
+                                    value={valueInputs.email}
+                                    type="Email"
+                                    autoComplete="current-password"
+                                    variant="outlined"
+                                    onChange={onHandleInputs}
+                                    color="secondary"
+                                />
+                                <TextField
+                                    className={classes.input}
+                                    id="outlined-password-input"
+                                    label="password"
+                                    value={valueInputs.password}
+                                    type="password"
+                                    autoComplete="current-password"
+                                    variant="outlined"
+                                    onChange={onHandleInputs}
+                                    color="secondary"
+                                />
+                                <Button type="submit" value="login" color="inherit" onClick={onLogInAuthHandle}>
+                                    Login
+                                </Button>
+                                <Button type="submit" value="signIn" color="inherit" onClick={createUserInFirebase}>
+                                    Sign&nbsp;Up
+                                </Button>
+                            </fieldset>
+                        </form>
+                    </Popover>
+                </div>
             )}
         </div>
     )

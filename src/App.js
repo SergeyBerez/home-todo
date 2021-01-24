@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react"
 // import firebase from "./Firebase/firebaseConfig"
-import Context from "./Context/Context"
+import { _Context } from "./Context/Context"
 import { Route, Switch, Redirect } from "react-router-dom"
 import Container from "@material-ui/core/Container"
 
 import "./App.css"
-import MiniDrawer from "./Links/Drower"
+import MiniDrawer from "./LinksDrowerHeader/Drower"
 
 import Home from "./pages/Home"
 import Users from "./pages/Users/Users"
-import UserPersonalTasks from "./pages/Users/UserPersonalTasks"
+import UserPersonalTasks from "./pages/UsersTask/UserPersonalTasks"
 import About from "./pages/About"
 import { makeStyles } from "@material-ui/core/styles"
-import firebase from "./Firebase/firebaseConfig.js"
+import _firebase from "./Firebase/firebaseConfig.js"
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     h3: {
-        marginTop: 130,
+        marginTop: 150,
         marginLeft: 30,
     },
 }))
@@ -38,14 +38,14 @@ function App() {
     const classes = useStyles()
 
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
-
+    const message = [
+        "приложение для создания пользователей и записей заметок",
+        "At First You need to LOGIN or Register",
+    ]
     const [stateUsers, setUsers] = useState(USERS_LOCAL_STORAGE)
     const [valueUser, setValueUser] = useState({ value: "" })
     const [valueTodo, setValueTodor] = useState({ value: "" })
 
-    useEffect(() => {
-        getUsersFromFairbase()
-    }, [])
     const [auth, setAuth] = useState(false)
     const authisLogged = () => {
         setAuth(true)
@@ -53,9 +53,12 @@ function App() {
     const authIsExit = () => {
         setAuth(false)
     }
+    useEffect(() => {
+        getUsersFromFairbase()
+    }, [])
     const getUsersFromFairbase = async (params) => {
         let users = [...stateUsers]
-        const db = firebase.database()
+        const db = _firebase.database()
         const value = db.ref("users")
         value.on("value", (elem) => {
             if (elem.val()) {
@@ -89,7 +92,7 @@ function App() {
         // }
     }
     const postUsertoFirebase = (user) => {
-        const db = firebase.database()
+        const db = _firebase.database()
         db.ref("users/" + user.id_user)
             .set(user)
             .then((user) => {
@@ -98,7 +101,7 @@ function App() {
     }
 
     const removeUserFromFirebase = (userId) => {
-        const db = firebase.database()
+        const db = _firebase.database()
         const user = db.ref("users").child(userId)
         user.remove()
     }
@@ -189,24 +192,7 @@ function App() {
         setValueTodor({ value: "" })
         postUsertoFirebase(user)
     }
-    // const changeChecked = (e, i) => {
-    //   let todos = [...stateUsers.todos];
-    //   todos[i].completed = e.target.checked;
 
-    //   setUsers({ todos, value: stateUsers.value });
-    // };
-
-    // const onShowUserTask = (id) => {
-    //   let todos = [...stateUsers.todos].map((user) => {
-    //     if (user.id === id) {
-    //       user.completed = !user.completed;
-    //     }
-    //     return user;
-    //   });
-
-    //   console.log(stateUsers);
-    //   setUsers({ todos, value: stateUsers.value });
-    // };
     const deleteUser = (i, idUser) => {
         let users = [...stateUsers]
         users.splice(i, 1)
@@ -233,7 +219,7 @@ function App() {
     }
 
     return (
-        <Context.Provider value={{ auth, authisLogged, authIsExit }}>
+        <_Context.Provider value={{ auth, authisLogged, authIsExit }}>
             <Container className={classes.root}>
                 <MiniDrawer />
                 <Switch>
@@ -263,7 +249,9 @@ function App() {
                         <Route
                             exact
                             path="/users"
-                            render={() => <h3 className={classes.h3}>At First You need to LOGIN or Register</h3>}
+                            render={() => {
+                                return <About message={message[1]}></About>
+                            }}
                         />
                     )}
 
@@ -284,16 +272,21 @@ function App() {
                             />
                         )}
                     />
-                    <Route path="/about" component={About} />
-                    <Redirect to="/todo-material-firebase"></Redirect>
                     <Route
+                        path="/about"
+                        render={() => {
+                            return <About message={message[0]}></About>
+                        }}
+                    />
+                    <Redirect to="/todo-material-firebase"></Redirect>
+                    {/* <Route
                         render={() => {
                             return <h1 style={{ color: "red" }}> 404 not found page...</h1>
                         }}
-                    />
+                    /> */}
                 </Switch>
             </Container>
-        </Context.Provider>
+        </_Context.Provider>
     )
 }
 

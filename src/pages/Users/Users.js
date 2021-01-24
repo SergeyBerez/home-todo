@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 import List from "@material-ui/core/List"
 import Alert from "@material-ui/lab/Alert"
-import User from "./User"
+import UserMyComponent from "./User"
 
 import PeopleAltTwoToneIcon from "@material-ui/icons/PeopleAltTwoTone"
 
@@ -55,9 +55,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function Users(props) {
+   
     const classes = useStyles()
     // props.value.length > 2? <h3>
-   
+
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.Alert}>
@@ -100,7 +101,7 @@ function Users(props) {
                 </Button>
             </div>
             <List>
-                <User users={props.users} deleteUser={props.deleteUser}></User>
+                <UserMyComponent users={props.users} deleteUser={props.deleteUser}></UserMyComponent>
             </List>
         </div>
     )
