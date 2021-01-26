@@ -53,10 +53,10 @@ function App() {
   const authIsExit = () => {
     setAuth(false);
   };
+
+  //===get user from firebase ======
   useEffect(() => {
-    getUsersFromFairbase();
-  }, []);
-  const getUsersFromFairbase = async (params) => {
+ const getUsersFromFairbase = async (params) => {
     let users = [...stateUsers];
     const value = database.ref("users");
     value.on("value", (elem) => {
@@ -76,20 +76,14 @@ function App() {
       }
     });
 
-    // let response = await fetch("https://react-quize-46f17.firebaseio.com/users.json")
-
-    // console.log(users)
-    // // let newUsers = [];
-    // if (response.ok) {
-    //     let json = await response.json()
-    //     console.log("getUsersFromFairbase", json)
-    //     if (json !== null) {
-    //         Object.values(json).forEach((objFirestore) => {
-    //             users.push(objFirestore)
-    //         })
-    //     }
-    // }
+// call our function get user from firebase
+ getUsersFromFairbase();
+  }, []);
+ 
+    
   };
+
+  // ===post data to firebase===
   const postUsertoFirebase = (user) => {
     database
       .ref("users/" + user.id_user)
@@ -97,10 +91,9 @@ function App() {
       .then((user) => {
       });
   };
-
+// =========remove  data from firebase====
   const removeUserFromFirebase = (userId) => {
-    
-    const user = database.ref("users").child(userId);
+     const user = database.ref("users").child(userId);
     user.remove();
   };
   const addUser = () => {
@@ -122,7 +115,9 @@ function App() {
     } else {
       console.log("change title");
     }
-  };
+};
+  
+  // === handle input when we clicked on button in field
   const changeTitleUserTask = (value) => {
     setValueUser({ value });
   };
@@ -130,6 +125,8 @@ function App() {
   const changeTitlebyModal = (value) => {
     setValueTodor({ value });
   };
+
+  // ===handle input when we clicked on key enter ===
   const keyHandle = (e) => {
     if (e.keyCode === 13 && valueUser.value.length > 2) {
       addUser();

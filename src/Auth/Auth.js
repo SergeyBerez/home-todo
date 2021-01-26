@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     typography: {
         marginBottom: 5,
         fontSize: "0.8rem",
-        color: "red",
+
         textOverflow: "ellipsis",
     },
     icon: {
