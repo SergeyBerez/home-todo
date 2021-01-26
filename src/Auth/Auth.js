@@ -6,16 +6,27 @@ import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 import Popover from "@material-ui/core/Popover"
 import { _Context } from "../Context/Context.js"
-
+import GoogleButton from "react-google-button"
+import FacebookIcon from "@material-ui/icons/Facebook"
+import CloseIcon from "@material-ui/icons/Close"
+import DialogTitle from "@material-ui/core/DialogTitle"
+import Dialog from "@material-ui/core/Dialog"
 const useStyles = makeStyles((theme) => ({
     typography: {
-        fontSize: "0.7rem",
+        marginBottom: 5,
+        fontSize: "0.8rem",
         color: "red",
+        textOverflow: "ellipsis",
+    },
+    icon: {
+        marginLeft: "auto",
     },
     form: {
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         padding: 2,
+        alignItems: "center",
 
         [theme.breakpoints.up("xs")]: {
             flexWrap: "wrap",
@@ -38,11 +49,18 @@ const useStyles = makeStyles((theme) => ({
             },
         },
         [theme.breakpoints.up("md")]: {
-            width: "30%",
+            width: "100%",
             "& input": {
                 padding: "13px 15px",
             },
         },
+    },
+    blockButton: {
+        textAlign: "center",
+        width: "100%",
+    },
+    button: {
+        margin: "5px",
     },
 }))
 
@@ -57,19 +75,7 @@ const AuthUser = () => {
             [e.target.type]: e.target.value,
         })
     }
-    const [anchorEl, setAnchorEl] = React.useState(null)
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
-
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
-
-    const open = Boolean(anchorEl)
-    const id = open ? "simple-popover" : undefined
-    useEffect(() => {}, [])
     const createUserInFirebase = (e) => {
         e.preventDefault()
         const { email, password } = valueInputs
@@ -131,6 +137,15 @@ const AuthUser = () => {
         authIsExit()
         SetmessageFirebase("")
     }
+    const [open, setOpen] = React.useState(false)
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = (value) => {
+        setOpen(false)
+    }
+
     return (
         <div>
             {auth ? (
@@ -143,57 +158,83 @@ const AuthUser = () => {
                 </div>
             ) : (
                 <div>
-                    <Button aria-describedby={id} variant="contained" color="primary" onClick={handleClick}>
-                        Enter/Register
-                    </Button>
-                    <Popover
-                        id={id}
-                        open={open}
-                        anchorEl={anchorEl}
+                    {" "}
+                    <div>
+                        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                            Enter/Register
+                        </Button>
+                    </div>
+                    <Dialog
+                        className={classes.dialog}
                         onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center",
-                        }}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center",
-                        }}>
+                        aria-labelledby="simple-dialog-title"
+                        open={open}>
+                        {" "}
+                        <CloseIcon className={classes.icon} onClick={handleClose}></CloseIcon>
+                        <DialogTitle id="simple-dialog-title"> Register</DialogTitle>
                         <form className={classes.form}>
-                            <fieldset>
-                                Register
-                                <Typography className={classes.typography}>{messageFirebase}</Typography>
-                                <TextField
-                                    className={classes.input}
-                                    id="outlined-Email-input"
-                                    label="email"
-                                    value={valueInputs.email}
-                                    type="Email"
-                                    autoComplete="current-password"
-                                    variant="outlined"
-                                    onChange={onHandleInputs}
-                                    color="secondary"
-                                />
-                                <TextField
-                                    className={classes.input}
-                                    id="outlined-password-input"
-                                    label="password"
-                                    value={valueInputs.password}
-                                    type="password"
-                                    autoComplete="current-password"
-                                    variant="outlined"
-                                    onChange={onHandleInputs}
-                                    color="secondary"
-                                />
-                                <Button type="submit" value="login" color="inherit" onClick={onLogInAuthHandle}>
+                            <Typography className={classes.typography}>{messageFirebase}</Typography>
+                            <TextField
+                                className={classes.input}
+                                id="outlined-Email-input"
+                                label="email"
+                                value={valueInputs.email}
+                                type="Email"
+                                autoComplete="current-password"
+                                variant="outlined"
+                                onChange={onHandleInputs}
+                                color="secondary"
+                            />
+                            <TextField
+                                className={classes.input}
+                                id="outlined-password-input"
+                                label="password"
+                                value={valueInputs.password}
+                                type="password"
+                                autoComplete="current-password"
+                                variant="outlined"
+                                onChange={onHandleInputs}
+                                color="secondary"
+                            />
+                            <div className={classes.blockButton}>
+                                {" "}
+                                <Button
+                                    className={classes.button}
+                                    type="submit"
+                                    value="login"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={onLogInAuthHandle}>
                                     Login
                                 </Button>
-                                <Button type="submit" value="signIn" color="inherit" onClick={createUserInFirebase}>
+                                <Button
+                                    className={classes.button}
+                                    type="submit"
+                                    value="signIn"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={createUserInFirebase}>
                                     Sign&nbsp;Up
                                 </Button>
-                            </fieldset>
+                            </div>
+
+                            <Button
+                                className={classes.button}
+                                type="submit"
+                                value="signIn"
+                                variant="contained"
+                                color="primary">
+                                <FacebookIcon></FacebookIcon>
+                                &nbsp; Enter&nbsp;Facebook
+                            </Button>
+                            <GoogleButton
+                                className={classes.button}
+                                onClick={() => {
+                                    console.log("Google button clicked")
+                                }}
+                            />
                         </form>
-                    </Popover>
+                    </Dialog>
                 </div>
             )}
         </div>
