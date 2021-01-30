@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react"
-import { authFirebase } from "../Firebase/firebaseConfig"
+import firebase, { authFirebase } from "../Firebase/firebaseConfig"
 import TextField from "@material-ui/core/TextField"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
-import Popover from "@material-ui/core/Popover"
+
 import { _Context } from "../Context/Context.js"
 import GoogleButton from "react-google-button"
 import FacebookIcon from "@material-ui/icons/Facebook"
@@ -12,49 +12,53 @@ import CloseIcon from "@material-ui/icons/Close"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import Dialog from "@material-ui/core/Dialog"
 const useStyles = makeStyles((theme) => ({
+    // [theme.breakpoints.up("xs")]: {},
+    // [theme.breakpoints.up("sm")]: {},
+    // [theme.breakpoints.up("md")]: {},
+    [theme.breakpoints.up("xs")]: {
+        input: {
+            width: "100%",
+            "& input": {
+                padding: "13px 10px",
+            },
+        },
+
+        dialog: {
+            textAlign: "center",
+
+            "& form": {
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+            },
+        },
+    },
+    [theme.breakpoints.up("sm")]: {
+        input: {
+            width: "100%",
+            "& input": {
+                padding: "13px 15px",
+            },
+        },
+    },
+    [theme.breakpoints.up("md")]: {
+        input: {
+            width: "100%",
+            "& input": {
+                padding: "15px 15px",
+            },
+        },
+    },
     typography: {
         marginBottom: 5,
         fontSize: "0.8rem",
-
         textOverflow: "ellipsis",
     },
     icon: {
         marginLeft: "auto",
     },
-    form: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        padding: 2,
-        alignItems: "center",
 
-        [theme.breakpoints.up("xs")]: {
-            flexWrap: "wrap",
-        },
-        [theme.breakpoints.up("sm")]: {},
-        [theme.breakpoints.up("md")]: { flexWrap: "nowrap" },
-    },
-    input: {
-        [theme.breakpoints.up("xs")]: {
-            width: "100%",
-            "& input": {
-                padding: "13px 10px",
-                // fontSize: "0.5rem",
-            },
-        },
-        [theme.breakpoints.up("sm")]: {
-            width: "100%",
-            "& input": {
-                padding: "13px 15px",
-            },
-        },
-        [theme.breakpoints.up("md")]: {
-            width: "100%",
-            "& input": {
-                padding: "13px 15px",
-            },
-        },
-    },
     blockButton: {
         textAlign: "center",
         width: "100%",
@@ -132,6 +136,86 @@ const AuthUser = () => {
                 var messageFirebase = error.message
                 SetmessageFirebase(messageFirebase)
             })
+    }
+
+    const AuthWithGoogle = () => {
+        var provider = new firebase.auth.GoogleAuthProvider()
+        firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                /** @type {firebase.auth.OAuthCredential} */
+                var credential = result.credential
+
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                var token = credential.accessToken
+                // The signed-in user info.
+                var user = result.user
+                console.log(user, token, credential)
+
+                authisLogged()
+                SetvalutInputs({
+                    email: "",
+                    password: "",
+                })
+
+                SetmessageFirebase(user.email, user.displayName)
+                localStorage.setItem(
+                    "LOGIN_USER",
+                    JSON.stringify({
+                        id: user.uid,
+                        localId: user.l,
+                        email: user.email,
+                        token,
+                    })
+                )
+                // ...
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code
+                var errorMessage = error.message
+                // The email of the user's account used.
+                var email = error.email
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential
+                // ...
+            })
+
+        console.log("auth with gogle")
+    }
+
+    const authWithFaceBook = (e) => {
+        e.preventDefault()
+        console.log("auth with facebook")
+        var provider = new firebase.auth.FacebookAuthProvider()
+        firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                /** @type {firebase.auth.OAuthCredential} */
+                var credential = result.credential
+
+                // The signed-in user info.
+                var user = result.user
+                console.log(user)
+                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+                var accessToken = credential.accessToken
+
+                // ...
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                var errorCode = error.code
+                var errorMessage = error.message
+                // The email of the user's account used.
+                var email = error.email
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential
+
+                // ...
+            })
+        console.log("auth with facebook")
     }
     const authExit = () => {
         authIsExit()
@@ -223,13 +307,15 @@ const AuthUser = () => {
                                 type="submit"
                                 value="signIn"
                                 variant="contained"
-                                color="primary">
+                                color="primary"
+                                onClick={authWithFaceBook}>
                                 <FacebookIcon></FacebookIcon>
                                 &nbsp; Enter&nbsp;Facebook
                             </Button>
                             <GoogleButton
                                 className={classes.button}
                                 onClick={() => {
+                                    AuthWithGoogle()
                                     console.log("Google button clicked")
                                 }}
                             />
