@@ -215,7 +215,7 @@ const AuthUser = () => {
 
                 // ...
             })
-        console.log("auth with facebook")
+      
     }
     const authExit = () => {
         authIsExit()
