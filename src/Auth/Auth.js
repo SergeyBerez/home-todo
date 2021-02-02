@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
 
-import { _Context } from "../Context/Context.js"
+import { Context } from "../Context/Context.js"
 import GoogleButton from "react-google-button"
 import FacebookIcon from "@material-ui/icons/Facebook"
 import CloseIcon from "@material-ui/icons/Close"
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AuthUser = () => {
     const classes = useStyles()
-    const { auth, authisLogged, authIsExit } = useContext(_Context)
+    const { auth, authisLogged, authIsExit } = useContext(Context)
     const [messageFirebase, SetmessageFirebase] = useState("")
     const [valueInputs, SetvalutInputs] = useState({ email: "", password: "" })
     const onHandleInputs = (e) => {

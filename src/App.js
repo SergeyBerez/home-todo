@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 // import firebase from "./Firebase/firebaseConfig"
-import { _Context } from "./Context/Context"
+import { ContextProvider, Context } from "./Context/Context"
 import { Route, Switch, Redirect } from "react-router-dom"
 import Container from "@material-ui/core/Container"
 
@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
     const classes = useStyles()
-
+    // const { auth } = useContext(Context)
+    // console.log(auth)
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
     const message = [
         "приложение для создания пользователей и записей заметок",
@@ -45,14 +46,6 @@ function App() {
     const [stateUsers, setUsers] = useState(USERS_LOCAL_STORAGE)
     const [valueUser, setValueUser] = useState({ value: "" })
     const [valueTodo, setValueTodor] = useState({ value: "" })
-    // ----fuck use context   pass data through the componen
-    const [auth, setAuth] = useState(false)
-    const authisLogged = () => {
-        setAuth(true)
-    }
-    const authIsExit = () => {
-        setAuth(false)
-    }
 
     //===get user from firebase ======
     useEffect(() => {
@@ -214,7 +207,7 @@ function App() {
     }
 
     return (
-        <_Context.Provider value={{ auth, authisLogged, authIsExit }}>
+        <ContextProvider>
             <Container className={classes.root}>
                 <MiniDrawer />
                 <Switch>
@@ -225,10 +218,10 @@ function App() {
                             return <Home users={stateUsers} />
                         }}
                     />
-                    {auth ? (
+                    {true ? (
                         <Route
                             exact
-                            path="/users"
+                            path="/todo-material-firebase/users"
                             render={() => (
                                 <Users
                                     addUser={addUser}
@@ -243,7 +236,7 @@ function App() {
                     ) : (
                         <Route
                             exact
-                            path="/users"
+                            path="/todo-material-firebase/users"
                             render={() => {
                                 return <About message={message[1]}></About>
                             }}
@@ -251,7 +244,7 @@ function App() {
                     )}
 
                     <Route
-                        path="/users/:id"
+                        path="/todo-material-firebase/users/:id"
                         render={(e) => (
                             <UserPersonalTasks
                                 valueUser={valueUser.value}
@@ -281,7 +274,7 @@ function App() {
                     /> */}
                 </Switch>
             </Container>
-        </_Context.Provider>
+        </ContextProvider>
     )
 }
 

@@ -87,11 +87,11 @@ const links = [
     },
     {
         title: "users",
-        link: "/users",
+        link: "/todo-material-firebase/users",
     },
     {
         title: "about",
-        link: "/about",
+        link: "/todo-material-firebase/about",
     },
 ]
 
