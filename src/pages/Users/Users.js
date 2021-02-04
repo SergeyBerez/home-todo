@@ -54,8 +54,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-function Users(props) {
-   
+const Users = (props) => {
+    console.log(props.history)
     const classes = useStyles()
     // props.value.length > 2? <h3>
 

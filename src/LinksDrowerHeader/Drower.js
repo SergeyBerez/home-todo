@@ -129,7 +129,7 @@ const MiniDrawer = ({ auth }) => {
                     <Typography className={classes.flexGrow} variant="h6" noWrap>
                         Menu
                     </Typography>
-                    <AuthMyComponent auth={auth}></AuthMyComponent>
+                    <AuthMyComponent ></AuthMyComponent>
                 </Toolbar>
             </AppBar>
             <Drawer

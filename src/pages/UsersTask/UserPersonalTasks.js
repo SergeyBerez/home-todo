@@ -97,7 +97,7 @@ const UserPersonalTasks = (props) => {
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.Alert}>
-                <NavLink className={classes.navLink} to={"/users/"}>
+                <NavLink className={classes.navLink} to={"/todo-material-firebase/users/"}>
                     <IconButton>
                         <KeyboardBackspaceIcon></KeyboardBackspaceIcon>
                     </IconButton>

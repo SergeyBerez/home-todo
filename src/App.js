@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react"
-// import firebase from "./Firebase/firebaseConfig"
-import { ContextProvider, Context } from "./Context/Context"
+
+import { Context } from "./Context/Context"
+
 import { Route, Switch, Redirect } from "react-router-dom"
 import Container from "@material-ui/core/Container"
 
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
     const classes = useStyles()
-    // const { auth } = useContext(Context)
+    const { auth } = useContext(Context)
     // console.log(auth)
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
     const message = [
@@ -51,21 +52,28 @@ function App() {
     useEffect(() => {
         const getUsersFromFirebase = (params) => {
             let users = [...stateUsers]
-            database.ref().on("value", (snapshot) => {
-                console.log(snapshot.val())
-            })
 
             database.ref().on("value", (elem) => {
                 if (elem.val()) {
-                    let newArrUser = users.concat(Object.values(elem.val()))
-                    let uniqeArray = newArrUser.filter((item, index, self) => {
-                        return (
-                            index ===
-                            self.findIndex((obj) => {
-                                return item.id_user === obj.id_user
-                            })
-                        )
-                    })
+                    let newArrUser = Object.values(elem.val()).reduce((arr, obj) => {
+                        for (const iterator in obj) {
+                            arr.push(obj[iterator])
+                        }
+                        return arr
+                    }, [])
+
+                    let usersTogether = users.concat(newArrUser)
+
+                    let uniqeArray = Array.from(new Set(usersTogether.map(JSON.stringify))).map(JSON.parse)
+                    // let uniqeArray = newArrUser.filter((item, index, self) => {
+                    //     console.log(item, index, self)
+                    //     return (
+                    //         index ===
+                    //         self.findIndex((obj) => {
+                    //             return item.id_user === obj.id_user
+                    //         })
+                    //     )
+                    // })
 
                     localStorage.setItem("users", JSON.stringify(uniqeArray))
                     setUsers(uniqeArray)
@@ -100,7 +108,9 @@ function App() {
         }
         if (valueUser.value.length > 2) {
             let users = [...stateUsers]
+
             users.push(newUser)
+            console.log(users)
             localStorage.setItem("users", JSON.stringify(users))
             setUsers(users)
             setValueUser({ value: "" })
@@ -132,7 +142,7 @@ function App() {
     }
 
     const addTodoTaskUser = (id_user, count_task) => {
-        console.log("ddTodoTaskUser")
+        console.log(id_user, count_task);
         if (valueUser.value.length > 2) {
             let users = [...stateUsers]
             let updateUser = users.find((user, i) => {
@@ -141,13 +151,17 @@ function App() {
 
             updateUser.countTask = count_task + 1
             const userTasks = [...updateUser.tasks]
+          
             const date = new Date()
             userTasks.push({
                 id_task: new Date().getTime() + 1,
                 title: valueUser.value,
                 time_task: `${new Date().toLocaleDateString()} :${date.getHours()}:${date.getMinutes()}`,
             })
+             console.log(updateUser.completed)
+console.log(updateUser.tasks);
             updateUser.tasks = userTasks
+             console.log("ddTodoTaskUser",users)
             setUsers(users)
             localStorage.setItem("users", JSON.stringify(users))
             setValueUser({ value: "" })
@@ -183,6 +197,7 @@ function App() {
 
     const deleteUser = (i, idUser) => {
         let users = [...stateUsers]
+        console.log(users)
         users.splice(i, 1)
         setUsers(users)
         removeUserFromFirebase(idUser)
@@ -207,42 +222,42 @@ function App() {
     }
 
     return (
-        <ContextProvider>
-            <Container className={classes.root}>
-                <MiniDrawer />
-                <Switch>
+        <Container className={classes.root}>
+            <MiniDrawer />
+            <Switch>
+                <Route
+                    exact
+                    path="/todo-material-firebase"
+                    render={() => {
+                        return <Home users={stateUsers} />
+                    }}
+                />
+                {auth ? (
                     <Route
                         exact
-                        path="/todo-material-firebase"
+                        path="/todo-material-firebase/users"
+                        render={() => (
+                            <Users
+                                addUser={addUser}
+                                keyHandle={keyHandle}
+                                changeTitle={changeTitleUserTask}
+                                users={stateUsers}
+                                value={valueUser.value}
+                                deleteUser={deleteUser}
+                            />
+                        )}
+                    />
+                ) : (
+                    <Route
+                        exact
+                        path="/todo-material-firebase/users"
                         render={() => {
-                            return <Home users={stateUsers} />
+                            return <About message={message[1]}></About>
                         }}
                     />
-                    {true ? (
-                        <Route
-                            exact
-                            path="/todo-material-firebase/users"
-                            render={() => (
-                                <Users
-                                    addUser={addUser}
-                                    keyHandle={keyHandle}
-                                    changeTitle={changeTitleUserTask}
-                                    users={stateUsers}
-                                    value={valueUser.value}
-                                    deleteUser={deleteUser}
-                                />
-                            )}
-                        />
-                    ) : (
-                        <Route
-                            exact
-                            path="/todo-material-firebase/users"
-                            render={() => {
-                                return <About message={message[1]}></About>
-                            }}
-                        />
-                    )}
+                )}
 
+                {auth && (
                     <Route
                         path="/todo-material-firebase/users/:id"
                         render={(e) => (
@@ -260,21 +275,22 @@ function App() {
                             />
                         )}
                     />
-                    <Route
-                        path="/about"
-                        render={() => {
-                            return <About message={message[0]}></About>
-                        }}
-                    />
-                    <Redirect to="/todo-material-firebase"></Redirect>
-                    {/* <Route
+                )}
+
+                <Route
+                    path="/about"
+                    render={() => {
+                        return <About message={message[0]}></About>
+                    }}
+                />
+                <Redirect to="/todo-material-firebase"></Redirect>
+                {/* <Route
                         render={() => {
                             return <h1 style={{ color: "red" }}> 404 not found page...</h1>
                         }}
                     /> */}
-                </Switch>
-            </Container>
-        </ContextProvider>
+            </Switch>
+        </Container>
     )
 }
 

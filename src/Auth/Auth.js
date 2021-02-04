@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
+import { useHistory } from "react-router-dom"
 import firebase, { authFirebase } from "../Firebase/firebaseConfig"
 import TextField from "@material-ui/core/TextField"
 import { makeStyles } from "@material-ui/core/styles"
@@ -70,8 +71,10 @@ const useStyles = makeStyles((theme) => ({
 
 const AuthUser = () => {
     const classes = useStyles()
+    const history = useHistory()
+    console.log(history)
     const { auth, authisLogged, authIsExit } = useContext(Context)
-    const [messageFirebase, SetmessageFirebase] = useState("")
+    const [messageFirebase, SetmessageFormFirebase] = useState("")
     const [valueInputs, SetvalutInputs] = useState({ email: "", password: "" })
     const onHandleInputs = (e) => {
         SetvalutInputs({
@@ -79,7 +82,9 @@ const AuthUser = () => {
             [e.target.type]: e.target.value,
         })
     }
-
+    const backToMainPage = (e) => {
+        history.push("/todo-material-firebase/users/")
+    }
     const createUserInFirebase = (e) => {
         e.preventDefault()
         const { email, password } = valueInputs
@@ -87,7 +92,7 @@ const AuthUser = () => {
         authFirebase
             .createUserWithEmailAndPassword(email, password)
             .then((data) => {
-                authisLogged(true)
+                authisLogged()
                 console.log("login user", data.user)
                 SetvalutInputs({
                     email: "",
@@ -101,12 +106,13 @@ const AuthUser = () => {
                         email: data.user.email,
                     })
                 )
-                SetmessageFirebase(data.user.email)
+                SetmessageFormFirebase(data.user.email)
+                backToMainPage()
             })
             .catch((error) => {
                 var messageFirebase = error.message
                 console.log(messageFirebase)
-                SetmessageFirebase(messageFirebase)
+                SetmessageFormFirebase(messageFirebase)
             })
     }
     const onLogInAuthHandle = (e) => {
@@ -116,13 +122,12 @@ const AuthUser = () => {
         authFirebase
             .signInWithEmailAndPassword(email, password)
             .then((data) => {
-                authisLogged()
                 SetvalutInputs({
                     email: "",
                     password: "",
                 })
 
-                SetmessageFirebase(data.user.email)
+                SetmessageFormFirebase(data.user.email)
                 localStorage.setItem(
                     "LOGIN_USER",
                     JSON.stringify({
@@ -131,10 +136,12 @@ const AuthUser = () => {
                         email: data.user.email,
                     })
                 )
+                authisLogged()
+                backToMainPage()
             })
             .catch((error) => {
                 var messageFirebase = error.message
-                SetmessageFirebase(messageFirebase)
+                SetmessageFormFirebase(messageFirebase)
             })
     }
 
@@ -152,14 +159,14 @@ const AuthUser = () => {
                 // The signed-in user info.
                 var user = result.user
                 console.log(user, token, credential)
-
+                backToMainPage()
                 authisLogged()
                 SetvalutInputs({
                     email: "",
                     password: "",
                 })
 
-                SetmessageFirebase(user.email, user.displayName)
+                SetmessageFormFirebase(user.email, user.displayName)
                 localStorage.setItem(
                     "LOGIN_USER",
                     JSON.stringify({
@@ -201,7 +208,7 @@ const AuthUser = () => {
                 console.log(user)
                 // This gives you a Facebook Access Token. You can use it to access the Facebook API.
                 var accessToken = credential.accessToken
-
+                backToMainPage()
                 // ...
             })
             .catch((error) => {
@@ -215,11 +222,10 @@ const AuthUser = () => {
 
                 // ...
             })
-      
     }
     const authExit = () => {
         authIsExit()
-        SetmessageFirebase("")
+        SetmessageFormFirebase("")
     }
     const [open, setOpen] = React.useState(false)
     const handleClickOpen = () => {

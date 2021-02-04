@@ -86,12 +86,12 @@ const useStyles = makeStyles((theme) => ({
 function User({ users, deleteUser }) {
  
     const classes = useStyles()
-
+console.log(users);
     return users.map((user, i) => {
         return (
             <div key={i}>
                 <ListItem button className={classes.root}>
-                    <NavLink className={classes.navLink} to={"/users/" + parseInt(user.id_user)}>
+                    <NavLink className={classes.navLink} to={"/todo-material-firebase/users/" + parseInt(user.id_user)}>
                         <ListItemText className={classes.item} primary={i + 1} />
                         &#8195;
                         <PersonOutlineTwoToneIcon className={classes.icon} />
