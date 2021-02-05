@@ -150,7 +150,7 @@ const AuthUser = () => {
                     })
                 )
                 authisLogged()
-                backToMainPage()
+                auth && backToMainPage()
             })
             .catch((error) => {
                 var messageFirebase = error.message
@@ -221,7 +221,24 @@ const AuthUser = () => {
                 console.log(user)
                 // This gives you a Facebook Access Token. You can use it to access the Facebook API.
                 var accessToken = credential.accessToken
-                backToMainPage()
+
+                SetvalutInputs({
+                    email: "",
+                    password: "",
+                })
+
+                SetmessageFormFirebase(user.email, user.displayName)
+                localStorage.setItem(
+                    "LOGIN_USER",
+                    JSON.stringify({
+                        id: user.uid,
+                        localId: user.l,
+                        email: user.email,
+                    })
+                )
+                authisLogged()
+                auth && backToMainPage()
+
                 // ...
             })
             .catch((error) => {
@@ -237,6 +254,7 @@ const AuthUser = () => {
             })
     }
     const authExit = () => {
+        localStorage.removeItem("LOGIN_USER")
         authIsExit()
         SetmessageFormFirebase("")
     }

@@ -111,13 +111,13 @@ function App() {
             let users = [...stateUsers]
 
             users.push(newUser)
-            console.log(users)
+          
             localStorage.setItem("users", JSON.stringify(users))
             setUsers(users)
             setValueUser({ value: "" })
             postUsertoFirebase(newUser)
         } else {
-            console.log("change title")
+           
         }
     }
 
@@ -143,7 +143,7 @@ function App() {
     }
 
     const addTodoTaskUser = (id_user, count_task) => {
-        console.log(id_user, count_task);
+       
         if (valueUser.value.length > 2) {
             let users = [...stateUsers]
             let updateUser = users.find((user, i) => {
