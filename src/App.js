@@ -97,6 +97,7 @@ function App() {
         const user = database.ref("users").child(userId)
         user.remove()
     }
+    //========== add user to firebase to local storage to state
     const addUser = () => {
         let newUser = {
             id_user: Date.now() + 1,

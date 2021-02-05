@@ -107,7 +107,7 @@ const MiniDrawer = ({ auth }) => {
     const handleDrawerClose = () => {
         setOpen(false)
     }
-
+console.log('render drower');
     return (
         <div className={classes.root}>
             <CssBaseline />

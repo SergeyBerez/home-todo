@@ -72,10 +72,23 @@ const useStyles = makeStyles((theme) => ({
 const AuthUser = () => {
     const classes = useStyles()
     const history = useHistory()
-    console.log(history)
+    const LOGIN_USER = JSON.parse(localStorage.getItem("LOGIN_USER")) || false
+
     const { auth, authisLogged, authIsExit } = useContext(Context)
     const [messageFirebase, SetmessageFormFirebase] = useState("")
     const [valueInputs, SetvalutInputs] = useState({ email: "", password: "" })
+    useEffect(() => {
+        console.log("ssss")
+        IsLoggedUser()
+    }, [])
+
+    const IsLoggedUser = () => {
+        LOGIN_USER && authIsExit()
+        if (LOGIN_USER) {
+            SetmessageFormFirebase(LOGIN_USER.email)
+            authisLogged()
+        }
+    }
     const onHandleInputs = (e) => {
         SetvalutInputs({
             ...valueInputs,
