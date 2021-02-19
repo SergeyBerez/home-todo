@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useRef } from "react"
+import { useValue } from "../Context/ContextValue"
 import { makeStyles } from "@material-ui/core/styles"
 import TextField from "@material-ui/core/TextField"
 import IconButton from "@material-ui/core/IconButton"
@@ -34,26 +35,28 @@ const useStyles = makeStyles((theme) => ({
         width: "70%",
     },
 }))
-export const ModalEdit = ({ user, show, closeModal }) => {
+export const ModalEdit = ({ props, show, closeModal }) => {
+    const { valueTodo, handleUserInput, changeTitlebyModal, errorMessage } = useValue()
+    console.log("modal", props)
     const classes = useStyles()
-
-   
+    const textInput = useRef()
     return (
         <div className={show ? classes.root : classes.hideModal}>
             <div className={classes.headerButton}>
                 <Typography className={classes.typography}>
-                    {user.id + 1}new task:{user.value}
+                    {props.id + 1}new task:{props.value}
                 </Typography>
 
                 <IconButton aria-label="close" onClick={closeModal}>
                     <CloseIcon />
                 </IconButton>
             </div>
-            <Typography className={classes.typography}>old task:{user.title}</Typography>
+            <Typography className={classes.typography}>old task:{props.title}</Typography>
             <form>
                 <div className={classes.headerButton}>
                     <TextField
-                        label={"user task"}
+                        ref={textInput}
+                        label={"props task"}
                         className={classes.textField}
                         placeholder="edit task"
                         helperText=""
@@ -62,16 +65,15 @@ export const ModalEdit = ({ user, show, closeModal }) => {
                             shrink: true,
                         }}
                         type="text"
-                        value={user.value}
+                        value={valueTodo.value}
                         onChange={(e) => {
-                            user.changeTitlebyModal(e.target.value)
+                            changeTitlebyModal(e, textInput)
                         }}>
                         {" "}
                     </TextField>
                     <IconButton
                         onClick={() => {
-                            user.editTask(user.id_user, user.id_task)
-                            closeModal()
+                            props.editTask(props.id_user, props.id_task)
                         }}
                         aria-label="enter">
                         <TransitEnterexitIcon />

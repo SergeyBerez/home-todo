@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState } from "react"
 import { useHistory } from "react-router-dom"
 import firebase, { authFirebase } from "../Firebase/firebaseConfig"
 import TextField from "@material-ui/core/TextField"
 import { makeStyles } from "@material-ui/core/styles"
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
+import { useAuth } from "../Context/Context"
 
-import { Context } from "../Context/Context.js"
 import GoogleButton from "react-google-button"
 import FacebookIcon from "@material-ui/icons/Facebook"
 import CloseIcon from "@material-ui/icons/Close"
@@ -67,27 +67,27 @@ const useStyles = makeStyles((theme) => ({
     button: {
         margin: "5px",
     },
+    userAvatar: {
+        borderRadius: "50%",
+        maxWidth: 30,
+    },
 }))
 
 const AuthUser = () => {
+    console.log("====================authUser")
     const classes = useStyles()
     const history = useHistory()
-    const LOGIN_USER = JSON.parse(localStorage.getItem("LOGIN_USER")) || false
 
-    const { auth, authisLogged, authIsExit } = useContext(Context)
+    const { currentUser, authisLogged, authIsExit, signUp, authInfo } = useAuth()
     const [messageFirebase, SetmessageFormFirebase] = useState("")
     const [valueInputs, SetvalutInputs] = useState({ email: "", password: "" })
-    useEffect(() => {
-        console.log("ssss")
-        IsLoggedUser()
-    }, [])
+    const [open, setOpen] = useState(false)
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
 
-    const IsLoggedUser = () => {
-        LOGIN_USER && authIsExit()
-        if (LOGIN_USER) {
-            SetmessageFormFirebase(LOGIN_USER.email)
-            authisLogged()
-        }
+    const handleClose = (value) => {
+        setOpen(false)
     }
     const onHandleInputs = (e) => {
         SetvalutInputs({
@@ -96,7 +96,7 @@ const AuthUser = () => {
         })
     }
     const backToMainPage = (e) => {
-        history.push("/todo-material-firebase/users/")
+        history.push("/users/")
     }
     const createUserInFirebase = (e) => {
         e.preventDefault()
@@ -150,7 +150,7 @@ const AuthUser = () => {
                     })
                 )
                 authisLogged()
-                auth && backToMainPage()
+                currentUser && backToMainPage()
             })
             .catch((error) => {
                 var messageFirebase = error.message
@@ -160,8 +160,7 @@ const AuthUser = () => {
 
     const AuthWithGoogle = () => {
         var provider = new firebase.auth.GoogleAuthProvider()
-        firebase
-            .auth()
+        authFirebase
             .signInWithPopup(provider)
             .then((result) => {
                 /** @type {firebase.auth.OAuthCredential} */
@@ -171,24 +170,25 @@ const AuthUser = () => {
                 var token = credential.accessToken
                 // The signed-in user info.
                 var user = result.user
-                console.log(user, token, credential)
+
                 backToMainPage()
-                authisLogged()
+                // authisLogged()
                 SetvalutInputs({
                     email: "",
                     password: "",
                 })
 
                 SetmessageFormFirebase(user.email, user.displayName)
-                localStorage.setItem(
-                    "LOGIN_USER",
-                    JSON.stringify({
-                        id: user.uid,
-                        localId: user.l,
-                        email: user.email,
-                        token,
-                    })
-                )
+                // localStorage.setItem(
+                //     "LOGIN_USER",
+                //     JSON.stringify({
+                //         name: user.displayName,
+                //         id: user.uid,
+                //         localId: user.l,
+                //         email: user.email,
+                //         token,
+                //     })
+                // )
                 // ...
             })
             .catch((error) => {
@@ -204,76 +204,61 @@ const AuthUser = () => {
 
         console.log("auth with gogle")
     }
+    //========================authWithFaceBook
+    // const authWithFaceBook = (e) => {
+    //     e.preventDefault()
+    //     console.log("auth with facebook")
+    //     var provider = new firebase.auth.FacebookAuthProvider()
+    //     firebase
+    //         .auth()
+    //         .signInWithPopup(provider)
+    //         .then((result) => {
+    //             /** @type {firebase.auth.OAuthCredential} */
+    //             var credential = result.credential
+    //             // The signed-in user info.
+    //             var user = result.user
+    //             console.log(user)
+    //             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    //             var accessToken = credential.accessToken
+    //             SetvalutInputs({
+    //                 email: "",
+    //                 password: "",
+    //             })
+    //             SetmessageFormFirebase(user.email, user.displayName)
+    //             localStorage.setItem(
+    //                 "LOGIN_USER",
+    //                 JSON.stringify({
+    //                     name: user.displayName,
+    //                     id: user.uid,
+    //                     localId: user.l,
+    //                     email: user.email,
+    //                 })
+    //             )
+    //             authisLogged()
+    //             backToMainPage()
+    //             // ...
+    //         })
+    //         .catch((error) => {
+    //             // Handle Errors here.
+    //             var errorCode = error.code
+    //             var errorMessage = error.message
+    //             // The email of the user's account used.
+    //             var email = error.email
+    //             // The firebase.auth.AuthCredential type that was used.
+    //             var credential = error.credential
 
-    const authWithFaceBook = (e) => {
-        e.preventDefault()
-        console.log("auth with facebook")
-        var provider = new firebase.auth.FacebookAuthProvider()
-        firebase
-            .auth()
-            .signInWithPopup(provider)
-            .then((result) => {
-                /** @type {firebase.auth.OAuthCredential} */
-                var credential = result.credential
-
-                // The signed-in user info.
-                var user = result.user
-                console.log(user)
-                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-                var accessToken = credential.accessToken
-
-                SetvalutInputs({
-                    email: "",
-                    password: "",
-                })
-
-                SetmessageFormFirebase(user.email, user.displayName)
-                localStorage.setItem(
-                    "LOGIN_USER",
-                    JSON.stringify({
-                        id: user.uid,
-                        localId: user.l,
-                        email: user.email,
-                    })
-                )
-                authisLogged()
-                auth && backToMainPage()
-
-                // ...
-            })
-            .catch((error) => {
-                // Handle Errors here.
-                var errorCode = error.code
-                var errorMessage = error.message
-                // The email of the user's account used.
-                var email = error.email
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential
-
-                // ...
-            })
-    }
-    const authExit = () => {
-        localStorage.removeItem("LOGIN_USER")
-        authIsExit()
-        SetmessageFormFirebase("")
-    }
-    const [open, setOpen] = React.useState(false)
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
-
-    const handleClose = (value) => {
-        setOpen(false)
-    }
+    //             // ...
+    //         })
+    // }
 
     return (
         <div>
-            {auth ? (
+            {currentUser ? (
                 <div>
-                    <Typography className={classes.typography}>{messageFirebase}</Typography>
+                    <Typography className={classes.typography}>{authInfo.displayName}</Typography>
 
-                    <Button value="exit" color="inherit" onClick={authExit}>
+                    <img className={classes.userAvatar} src={authInfo.photoURL} alt="photo user"></img>
+                    <Button value="exit" color="inherit" onClick={authIsExit}>
                         exit
                     </Button>
                 </div>
@@ -339,7 +324,7 @@ const AuthUser = () => {
                                 </Button>
                             </div>
 
-                            <Button
+                            {/* <Button
                                 className={classes.button}
                                 type="submit"
                                 value="signIn"
@@ -348,12 +333,11 @@ const AuthUser = () => {
                                 onClick={authWithFaceBook}>
                                 <FacebookIcon></FacebookIcon>
                                 &nbsp; Enter&nbsp;Facebook
-                            </Button>
+                            </Button> */}
                             <GoogleButton
                                 className={classes.button}
                                 onClick={() => {
                                     AuthWithGoogle()
-                                    console.log("Google button clicked")
                                 }}
                             />
                         </form>

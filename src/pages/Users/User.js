@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-
+import React, { useHistory } from "react"
+import { nanoid } from "nanoid"
 import { NavLink } from "react-router-dom"
 
 import ListItem from "@material-ui/core/ListItem"
@@ -7,7 +7,7 @@ import ListItemText from "@material-ui/core/ListItemText"
 import Button from "@material-ui/core/Button"
 import { makeStyles } from "@material-ui/core/styles"
 import Divider from "@material-ui/core/Divider"
-import Alert from "@material-ui/lab/Alert"
+
 import DeleteIcon from "@material-ui/icons/Delete"
 import PersonOutlineTwoToneIcon from "@material-ui/icons/PersonOutlineTwoTone"
 
@@ -84,14 +84,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function User({ users, deleteUser }) {
- 
     const classes = useStyles()
-console.log(users);
+
+    console.log("user===", users)
     return users.map((user, i) => {
         return (
-            <div key={i}>
+            <div key={nanoid()}>
                 <ListItem button className={classes.root}>
-                    <NavLink className={classes.navLink} to={"/todo-material-firebase/users/" + parseInt(user.id_user)}>
+                    <NavLink className={classes.navLink} to={"/users/" + user.id_user}>
                         <ListItemText className={classes.item} primary={i + 1} />
                         &#8195;
                         <PersonOutlineTwoToneIcon className={classes.icon} />

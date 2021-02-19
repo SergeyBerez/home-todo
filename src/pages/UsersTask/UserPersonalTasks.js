@@ -1,4 +1,6 @@
-import React from "react"
+import React, { useHistory } from "react"
+import { nanoid } from "nanoid"
+import { useValue } from "../../Context/ContextValue"
 import ListUserTaskMycomponent from "./list"
 import List from "@material-ui/core/List"
 import Button from "@material-ui/core/Button"
@@ -55,19 +57,31 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
         },
     },
+    error: {
+        "&& label": { color: "red" },
+    },
 }))
 
 const UserPersonalTasks = (props) => {
-    
-    const tasks = []
-    const classes = useStyles()
+    const { valueInput, handleUserInput, errorMessage } = useValue()
 
-    console.log("==============UserPersonalTasks render user tasks", props)
+    const classes = useStyles()
+    const cls = [classes.textField]
+    const message = errorMessage || "Enter user"
+    // const history = useHistory()
+    // console.log(history)
+    if (!valueInput.validate && valueInput.touched) {
+        cls.push(classes.error)
+    } else {
+        cls.push("")
+    }
+    const tasks = []
+    console.log("==============UserPersonalTasks render user tasks")
     let RenderUserTask
     let user
     if (props.users.length) {
         user = props.users.find((user) => {
-            return user.id_user === parseInt(props.history.match.params.id)
+            return user.id_user === props.history.match.params.id
         })
 
         if (user.tasks === undefined) {
@@ -77,15 +91,14 @@ const UserPersonalTasks = (props) => {
         RenderUserTask = user.tasks.map((task, i) => {
             return (
                 <ListUserTaskMycomponent
-                    key={i}
+                    key={nanoid()}
                     id={i}
-                    id_user={parseInt(props.history.match.params.id)}
+                    id_user={props.history.match.params.id}
                     id_task={task.id_task}
                     value={props.valueTodo}
                     title={task.title}
                     time={task.time_task}
                     editTask={props.editTask}
-                    changeTitlebyModal={props.changeTitlebyModal}
                     deleteTask={props.deleteTask}
 
                     // showModal={item.showModal}
@@ -93,11 +106,12 @@ const UserPersonalTasks = (props) => {
             )
         })
     }
+    console.log(RenderUserTask)
     // ==============UserPersonalTasks render user tasks
     return (
         <div className={classes.header}>
             <Alert icon={false} severity="info" className={classes.Alert}>
-                <NavLink className={classes.navLink} to={"/todo-material-firebase/users/"}>
+                <NavLink className={classes.navLink} to={"/users/"}>
                     <IconButton>
                         <KeyboardBackspaceIcon></KeyboardBackspaceIcon>
                     </IconButton>
@@ -115,7 +129,7 @@ const UserPersonalTasks = (props) => {
             <div className={classes.root}>
                 <TextField
                     id="standard-full-width"
-                    label="Enter task"
+                    label={message}
                     className={classes.textField}
                     placeholder="name task"
                     helperText=""
@@ -124,17 +138,15 @@ const UserPersonalTasks = (props) => {
                         shrink: true,
                     }}
                     type="text"
-                    value={props.valueUser}
+                    value={valueInput.value}
                     onKeyUp={(e) => {
-                        props.keyHandle(e, parseInt(props.history.match.params.id), user.tasks.length)
+                        props.keyHandle(e, props.history.match.params.id, user.tasks.length)
                     }}
-                    onChange={(e) => {
-                        props.changeTitleUserTask(e.target.value)
-                    }}
+                    onChange={handleUserInput}
                     type="text"></TextField>
                 <Button
                     onClick={() => {
-                        props.addTodoTaskUser(parseInt(props.history.match.params.id), user.tasks.length)
+                        props.addTodoTaskUser(props.history.match.params.id, user.tasks.length)
                     }}
                     disabled={props.users.length === 0}
                     variant="contained"

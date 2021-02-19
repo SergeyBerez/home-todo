@@ -1,5 +1,7 @@
 import React from "react"
-import { Route, Switch, NavLink, Redirect } from "react-router-dom"
+import AuthMyComponent from "../Auth/Auth"
+import { NavLink } from "react-router-dom"
+import { useAuth } from "../Context/Context"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
 import clsx from "clsx"
 import Drawer from "@material-ui/core/Drawer"
@@ -18,7 +20,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon"
 import ListItemText from "@material-ui/core/ListItemText"
 import LinkIcon from "@material-ui/icons/Link"
 
-import AuthMyComponent from "../Auth/Auth"
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
@@ -83,21 +84,23 @@ const useStyles = makeStyles((theme) => ({
 const links = [
     {
         title: "home",
-        link: "/todo-material-firebase",
+        link: "/",
     },
     {
         title: "users",
-        link: "/todo-material-firebase/users",
+        link: "/users",
     },
     {
         title: "about",
-        link: "/todo-material-firebase/about",
+        link: "/about",
     },
 ]
 
-const MiniDrawer = ({ auth }) => {
+const MiniDrawer = () => {
+    const UID = "ar2szFVDDUZ4vEKla7r0lQqxve13"
     const classes = useStyles()
     const theme = useTheme()
+    const { authInfo } = useAuth()
     const [open, setOpen] = React.useState(false)
 
     const handleDrawerOpen = () => {
@@ -107,7 +110,7 @@ const MiniDrawer = ({ auth }) => {
     const handleDrawerClose = () => {
         setOpen(false)
     }
-console.log('render drower');
+    // console.log("render drower", authInfo)
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -129,7 +132,7 @@ console.log('render drower');
                     <Typography className={classes.flexGrow} variant="h6" noWrap>
                         Menu
                     </Typography>
-                    <AuthMyComponent ></AuthMyComponent>
+                    <AuthMyComponent></AuthMyComponent>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -158,6 +161,11 @@ console.log('render drower');
                             <ListItemText primary={text.title} />
                         </ListItem>
                     ))}
+                    {authInfo.uid === UID ? (
+                        <NavLink onClick={handleDrawerClose} exact to={"/admin"} className={classes.link}>
+                            <ListItemText primary="ADMIN" />
+                        </NavLink>
+                    ) : null}
                 </List>
             </Drawer>
         </div>

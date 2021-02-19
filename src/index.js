@@ -1,16 +1,20 @@
 import React from "react"
 import ReactDOM from "react-dom"
+
 import "./index.css"
 import App from "./App"
 import * as serviceWorker from "./serviceWorker"
 import { BrowserRouter } from "react-router-dom"
 import { ContextProvider } from "./Context/Context"
+import ContextValue from "./Context/ContextValue"
 const app = (
-    <ContextProvider>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
-    </ContextProvider>
+    <ContextValue>
+        <ContextProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </ContextProvider>
+    </ContextValue>
 )
 
 ReactDOM.render(app, document.getElementById("root"))

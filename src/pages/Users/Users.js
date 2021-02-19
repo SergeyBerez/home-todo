@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 // import { NavLink } from "react-router-dom";
+import UserMyComponent from "./User"
+import { useValue } from "../../Context/ContextValue"
 import { makeStyles } from "@material-ui/core/styles"
 import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 import List from "@material-ui/core/List"
 import Alert from "@material-ui/lab/Alert"
-import UserMyComponent from "./User"
 
 import PeopleAltTwoToneIcon from "@material-ui/icons/PeopleAltTwoTone"
 
@@ -52,12 +53,25 @@ const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1),
         },
     },
+    error: {
+        "&& label": { color: "red" },
+    },
 }))
 
 const Users = (props) => {
-    console.log(props.history)
+    console.log("users")
+    const { valueInput, handleUserInput, errorMessage } = useValue()
     const classes = useStyles()
+    const cls = [classes.textField]
+
     // props.value.length > 2? <h3>
+    const message = errorMessage || "Enter user"
+
+    if (!valueInput.validate && valueInput.touched) {
+        cls.push(classes.error)
+    } else {
+        cls.push("")
+    }
 
     return (
         <div className={classes.header}>
@@ -71,8 +85,8 @@ const Users = (props) => {
                         &#8195;<span>NOT USER</span>&#8195;
                     </>
                 )}
-                {props.value.length > 3 ? (
-                    <span>User name&#8195;{props.value}</span>
+                {valueInput.value.length > 3 ? (
+                    <span>User name&#8195;{valueInput.value}</span>
                 ) : (
                     <span>Enter name more 3 letters</span>
                 )}
@@ -80,14 +94,15 @@ const Users = (props) => {
 
             <div className={classes.root}>
                 <TextField
-                    value={props.value}
-                    onChange={(e) => {
-                        props.changeTitle(e.target.value)
-                    }}
+                    // value={props.value}
+
+                    value={valueInput.value}
+                    // onChange={props.handleUserInput}
+                    onChange={handleUserInput}
                     onKeyUp={props.keyHandle}
                     id="standard-full-width"
-                    label="Enter user"
-                    className={classes.textField}
+                    label={message}
+                    className={cls.join(" ")}
                     placeholder="name user"
                     helperText=""
                     margin="normal"
@@ -96,7 +111,7 @@ const Users = (props) => {
                     }}
                     type="text"
                 />
-                <Button onClick={props.addUser} variant="contained" className={classes.button}>
+                <Button onClick={props.addNewUser} variant="contained" className={classes.button}>
                     ADD&nbsp;USER
                 </Button>
             </div>

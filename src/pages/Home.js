@@ -1,4 +1,5 @@
 import React from "react"
+import { nanoid } from "nanoid"
 import { makeStyles } from "@material-ui/core/styles"
 import Table from "@material-ui/core/Table"
 import TableBody from "@material-ui/core/TableBody"
@@ -45,7 +46,7 @@ export default function Home({ users }) {
                 </TableHead>
                 <TableBody>
                     {users.map((row) => (
-                        <TableRow key={row.id_user}>
+                        <TableRow key={nanoid()}>
                             <TableCell className={classes.th} component="th" scope="row">
                                 {row.user_name}
                             </TableCell>

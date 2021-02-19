@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react"
-
-import { Context } from "./Context/Context"
-
+import React, { useState, useEffect } from "react"
+import { nanoid } from "nanoid"
+import { useAuth } from "./Context/Context"
+import { useValue } from "./Context/ContextValue.js"
 import { Route, Switch, Redirect } from "react-router-dom"
 import Container from "@material-ui/core/Container"
 
@@ -10,8 +10,10 @@ import MiniDrawer from "./LinksDrowerHeader/Drower"
 
 import Home from "./pages/Home"
 import Users from "./pages/Users/Users"
+
 import UserPersonalTasks from "./pages/UsersTask/UserPersonalTasks"
 import About from "./pages/About"
+import Admin from "./Admin/Admin.js"
 import { makeStyles } from "@material-ui/core/styles"
 import { database } from "./Firebase/firebaseConfig.js"
 
@@ -36,21 +38,25 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function App() {
+    const UID = "ar2szFVDDUZ4vEKla7r0lQqxve13"
     const classes = useStyles()
-    const { auth } = useContext(Context)
-    // console.log(auth)
+    const { authInfo } = useAuth()
+    const { valueInput, valueTodo, setValue, setValueTodor, setErrorMessage } = useValue()
+
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
+
     const message = [
         "приложение для создания пользователей и записей заметок",
         "At First You need to LOGIN or Register",
     ]
     const [stateUsers, setUsers] = useState(USERS_LOCAL_STORAGE)
-    const [valueUser, setValueUser] = useState({ value: "" })
-    const [valueTodo, setValueTodor] = useState({ value: "" })
+    // const [userNameFromValue, setUserNameFromValue] = useState({ value: "", validate: false, touched: false })
 
     //===get user from firebase ======
+
     useEffect(() => {
-        const getUsersFromFirebase = (params) => {
+        console.log("app useEffect", authInfo)
+        const getTasksUsersFromFirebase = (params) => {
             let users = [...stateUsers]
 
             database.ref().on("value", (elem) => {
@@ -62,31 +68,63 @@ function App() {
                         return arr
                     }, [])
 
+                    if (authInfo.displayName) {
+                        let newUser = {
+                            id_user: authInfo.uid,
+                            time: new Date().toString().split("G")[0],
+                            user_name: authInfo.displayName,
+                            completed: false,
+                            tasks: [],
+                            countTask: 0,
+                        }
+                        newArrUser.push(newUser)
+                    }
+
                     let usersTogether = users.concat(newArrUser)
+                    const uniqueArray = usersTogether.filter((obj, index, self) => {
+                        return (
+                            index ===
+                            self.findIndex((obj2) => {
+                                return obj2.id_user === obj.id_user
+                            })
+                        )
+                    })
+                    console.log(uniqueArray)
+                    localStorage.setItem("users", JSON.stringify(uniqueArray))
+                    setUsers(uniqueArray)
+                } else if (authInfo) {
+                    let users = [...stateUsers]
+                    let newUser = {
+                        id_user: authInfo.uid,
+                        time: new Date().toString().split("G")[0],
+                        user_name: authInfo.displayName,
+                        completed: false,
+                        tasks: [],
+                        countTask: 0,
+                    }
+                    users.push(newUser)
 
-                    let uniqeArray = Array.from(new Set(usersTogether.map(JSON.stringify))).map(JSON.parse)
-                    // let uniqeArray = newArrUser.filter((item, index, self) => {
-                    //     console.log(item, index, self)
-                    //     return (
-                    //         index ===
-                    //         self.findIndex((obj) => {
-                    //             return item.id_user === obj.id_user
-                    //         })
-                    //     )
-                    // })
+                    const uniqueArray = users.filter((obj, index, self) => {
+                        return (
+                            index ===
+                            self.findIndex((obj2) => {
+                                return obj2.id_user === obj.id_user
+                            })
+                        )
+                    })
 
-                    localStorage.setItem("users", JSON.stringify(uniqeArray))
-                    setUsers(uniqeArray)
+                    localStorage.setItem("users", JSON.stringify(uniqueArray))
+                    setUsers(uniqueArray)
                 }
             })
 
             // call our function get user from firebase
         }
-        getUsersFromFirebase()
-    }, [])
+        getTasksUsersFromFirebase()
+    }, [authInfo])
 
     // ===post data to firebase===
-    const postUsertoFirebase = (user) => {
+    const CreateUserTaskInFirebase = (user) => {
         database
             .ref("users/" + user.id_user)
             .set(user)
@@ -94,57 +132,62 @@ function App() {
     }
     // =========remove  data from firebase====
     const removeUserFromFirebase = (userId) => {
+        console.log(userId)
         const user = database.ref("users").child(userId)
         user.remove()
     }
     //========== add user to firebase to local storage to state
-    const addUser = () => {
-        let newUser = {
-            id_user: Date.now() + 1,
-            time: new Date().toString().split("G")[0],
-            user_name: valueUser.value,
-            completed: false,
-            tasks: [],
-            countTask: 0,
-        }
-        if (valueUser.value.length > 2) {
-            let users = [...stateUsers]
+    const addNewUser = () => {
+        console.log(" function addNewUser")
 
+        // validate || setErrorMessage("введите имя пользвателя больше 3 букв")
+        if (valueInput.validate) {
+            let newUser = {
+                id_user: nanoid(),
+                time: new Date().toString().split("G")[0],
+                user_name: valueInput.value,
+                completed: false,
+                tasks: [],
+                countTask: 0,
+            }
+
+            let users = [...stateUsers]
             users.push(newUser)
-          
-            localStorage.setItem("users", JSON.stringify(users))
-            setUsers(users)
-            setValueUser({ value: "" })
-            postUsertoFirebase(newUser)
-        } else {
-           
+            const uniqueArray = users.filter((obj, index, self) => {
+                return (
+                    index ===
+                    self.findIndex((obj2) => {
+                        return obj2.id_user === obj.id_user
+                    })
+                )
+            })
+
+            localStorage.setItem("users", JSON.stringify(uniqueArray))
+            setUsers(uniqueArray)
+            setValue({ ...valueInput, value: "" })
+
+            CreateUserTaskInFirebase(newUser)
+
+            setErrorMessage("")
         }
     }
 
     // === handle input when we clicked on button in field
-    const changeTitleUserTask = (value) => {
-        setValueUser({ value })
-    }
-
-    const changeTitlebyModal = (value) => {
-        setValueTodor({ value })
-    }
 
     // ===handle input when we clicked on key enter ===
     const keyHandle = (e) => {
-        if (e.keyCode === 13 && valueUser.value.length > 2) {
-            addUser()
+        if (e.keyCode === 13) {
+            addNewUser()
         }
     }
     const keyHandleInputTask = (e, id_user, count_task) => {
-        if (e.keyCode === 13 && valueUser.value.length > 2) {
+        if (e.keyCode === 13) {
             addTodoTaskUser(id_user, count_task)
         }
     }
 
     const addTodoTaskUser = (id_user, count_task) => {
-       
-        if (valueUser.value.length > 2) {
+        if (valueInput.validate) {
             let users = [...stateUsers]
             let updateUser = users.find((user, i) => {
                 return user.id_user === id_user
@@ -152,60 +195,63 @@ function App() {
 
             updateUser.countTask = count_task + 1
             const userTasks = [...updateUser.tasks]
-          
+
             const date = new Date()
             userTasks.push({
                 id_task: new Date().getTime() + 1,
-                title: valueUser.value,
+                title: valueInput.value,
                 time_task: `${new Date().toLocaleDateString()} :${date.getHours()}:${date.getMinutes()}`,
             })
-             console.log(updateUser.completed)
-console.log(updateUser.tasks);
+
             updateUser.tasks = userTasks
-             console.log("ddTodoTaskUser",users)
+
             setUsers(users)
             localStorage.setItem("users", JSON.stringify(users))
-            setValueUser({ value: "" })
-            postUsertoFirebase(updateUser)
+            setValue({ ...valueInput, value: "" })
+            setErrorMessage("")
+            CreateUserTaskInFirebase(updateUser)
         }
     }
     const editTask = (id_user, id_task) => {
-        let users = [...stateUsers]
-        let user = users.find((params) => {
-            return params.id_user === id_user
-        })
-        let userTasks = [...user.tasks]
+        console.log(valueTodo.showModal)
+        if (valueTodo.validate) {
+            let users = [...stateUsers]
+            let user = users.find((params) => {
+                return params.id_user === id_user
+            })
+            let userTasks = [...user.tasks]
 
-        userTasks.map((item) => {
-            if (item.id_task === id_task) {
-                item.title = valueTodo.value
-            }
-            return item
-        })
-        user.tasks = userTasks
-        users.map((params) => {
-            if (id_user === params.id_user) {
-                params = user
-            }
-            return params
-        })
+            userTasks.map((item) => {
+                if (item.id_task === id_task) {
+                    item.title = valueTodo.value
+                }
+                return item
+            })
+            user.tasks = userTasks
+            users.map((params) => {
+                if (id_user === params.id_user) {
+                    params = user
+                }
+                return params
+            })
 
-        setUsers(users)
-        localStorage.setItem("users", JSON.stringify(users))
-        setValueTodor({ value: "" })
-        postUsertoFirebase(user)
+            setUsers(users)
+            localStorage.setItem("users", JSON.stringify(users))
+
+            setValueTodor({ value: "", validate: false, showModal: false })
+            CreateUserTaskInFirebase(user)
+        }
     }
 
     const deleteUser = (i, idUser) => {
         let users = [...stateUsers]
-        console.log(users)
         users.splice(i, 1)
-        setUsers(users)
-        removeUserFromFirebase(idUser)
         localStorage.setItem("users", JSON.stringify(users))
+
+        removeUserFromFirebase(idUser)
+        setUsers(users)
     }
     const deleteTask = (idUser, idTask, id) => {
-        console.log(id)
         let users = [...stateUsers]
         let user = users.find((user) => {
             return user.id_user === idUser
@@ -217,74 +263,85 @@ console.log(updateUser.tasks);
         let uniqueUsers = users.filter((user, pos) => {
             return users.indexOf(user) === pos
         })
-        postUsertoFirebase(user)
+
+        CreateUserTaskInFirebase(user)
         setUsers(uniqueUsers)
         localStorage.setItem("users", JSON.stringify(uniqueUsers))
     }
-
+    // console.log(value)
     return (
         <Container className={classes.root}>
             <MiniDrawer />
             <Switch>
                 <Route
                     exact
-                    path="/todo-material-firebase"
+                    path="/"
                     render={() => {
                         return <Home users={stateUsers} />
                     }}
                 />
-                {auth ? (
+                {authInfo.uid === UID ? (
+                    <Route
+                        path="/admin"
+                        render={() => {
+                            return <Admin></Admin>
+                        }}
+                    />
+                ) : null}
+                {authInfo ? (
                     <Route
                         exact
-                        path="/todo-material-firebase/users"
+                        path="/users"
                         render={() => (
                             <Users
-                                addUser={addUser}
+                                addNewUser={addNewUser}
                                 keyHandle={keyHandle}
-                                changeTitle={changeTitleUserTask}
+                                // handleUserInput={handleUserInput}
                                 users={stateUsers}
-                                value={valueUser.value}
+                                // errorMessage={errorMessage}
+                                // validate={userNameFromValue.validate}
+                                // value={userNameFromValue.value}
+                                // touched={userNameFromValue.touched}
                                 deleteUser={deleteUser}
+                                props={stateUsers}
                             />
                         )}
                     />
                 ) : (
                     <Route
                         exact
-                        path="/todo-material-firebase/users"
+                        path="/users"
                         render={() => {
                             return <About message={message[1]}></About>
                         }}
                     />
                 )}
-
-                {auth && (
+                {authInfo && (
                     <Route
-                        path="/todo-material-firebase/users/:id"
+                        path="/users/:id"
                         render={(e) => (
                             <UserPersonalTasks
-                                valueUser={valueUser.value}
+                                // userNameFromValue={userNameFromValue.value}
                                 valueTodo={valueTodo.value}
                                 history={e}
                                 users={stateUsers}
                                 keyHandle={keyHandleInputTask}
                                 addTodoTaskUser={addTodoTaskUser}
                                 editTask={editTask}
-                                changeTitleUserTask={changeTitleUserTask}
-                                changeTitlebyModal={changeTitlebyModal}
+                                // handleUserInput={handleUserInput}
+                                // changeTitlebyModal={changeTitlebyModal}
                                 deleteTask={deleteTask}
                             />
                         )}
                     />
                 )}
-
                 <Route
                     path="/about"
                     render={() => {
                         return <About message={message[0]}></About>
                     }}
                 />
-                <Redirect to="/todo-material-firebase"></Redirect>
+                <Redirect to="/"></Redirect>
                 {/* <Route
                         render={() => {
                             return <h1 style={{ color: "red" }}> 404 not found page...</h1>

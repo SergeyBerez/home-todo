@@ -1,6 +1,7 @@
 // import Modal from "../../components/modalEdit"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { makeStyles } from "@material-ui/core/styles"
+import { useValue } from "../../Context/ContextValue"
 import Button from "@material-ui/core/Button"
 import ListItem from "@material-ui/core/ListItem"
 
@@ -80,17 +81,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function List(props) {
+    console.log("list")
+    const { valueTodo } = useValue()
     const classes = useStyles()
-    const [openModal, setOpenModal] = useState(false)
+    const [openModal, setOpenModal] = useState(valueTodo.showModal)
+
     const showModal = () => {
         setOpenModal(true)
-        console.log("coloseModal")
+        // if (props.value > 3) {
+        //     setOpenModal(true)
+        // }
+        // console.log("coloseModal")
     }
     const closeModal = () => {
-        console.log("showModal")
+        console.log("===============showModal")
         setOpenModal(false)
     }
-    
     return (
         <>
             <ListItem className={classes.root}>
@@ -117,7 +123,7 @@ export default function List(props) {
                     </Button>
                 </div>
             </ListItem>
-            <ModalEdit user={props} show={openModal} closeModal={closeModal}></ModalEdit>
+            <ModalEdit props={props} show={openModal} closeModal={closeModal}></ModalEdit>
             <Divider />
         </>
     )
