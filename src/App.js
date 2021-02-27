@@ -41,7 +41,15 @@ function App() {
     const UID = "ar2szFVDDUZ4vEKla7r0lQqxve13"
     const classes = useStyles()
     const { authInfo } = useAuth()
-    const { valueInput, valueTodo, setValue, setValueTodor, setErrorMessage } = useValue()
+    const {
+        valueInput,
+        valueInputTask,
+        valueTodo,
+        setValue,
+        setValueInputTask,
+        setValueTodor,
+        setErrorMessage,
+    } = useValue()
 
     const USERS_LOCAL_STORAGE = JSON.parse(localStorage.getItem("users")) || []
 
@@ -187,7 +195,7 @@ function App() {
     }
 
     const addTodoTaskUser = (id_user, count_task) => {
-        if (valueInput.validate) {
+        if (valueInputTask.validate && valueInputTask.value !== "") {
             let users = [...stateUsers]
             let updateUser = users.find((user, i) => {
                 return user.id_user === id_user
@@ -199,7 +207,7 @@ function App() {
             const date = new Date()
             userTasks.push({
                 id_task: new Date().getTime() + 1,
-                title: valueInput.value,
+                title: valueInputTask.value,
                 time_task: `${new Date().toLocaleDateString()} :${date.getHours()}:${date.getMinutes()}`,
             })
 
@@ -207,9 +215,11 @@ function App() {
 
             setUsers(users)
             localStorage.setItem("users", JSON.stringify(users))
-            setValue({ ...valueInput, value: "" })
+            setValueInputTask({ ...valueInputTask, value: "" })
             setErrorMessage("")
             CreateUserTaskInFirebase(updateUser)
+        } else {
+            setErrorMessage("допустимы английские буквы и пробелы исключены")
         }
     }
     const editTask = (id_user, id_task) => {
@@ -268,7 +278,7 @@ function App() {
         setUsers(uniqueUsers)
         localStorage.setItem("users", JSON.stringify(uniqueUsers))
     }
-    // console.log(value)
+
     return (
         <Container className={classes.root}>
             <MiniDrawer />

@@ -63,14 +63,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserPersonalTasks = (props) => {
-    const { valueInput, handleUserInput, errorMessage } = useValue()
+    const { valueInputTask, handleUserInputTask, errorMessage } = useValue()
 
     const classes = useStyles()
     const cls = [classes.textField]
     const message = errorMessage || "Enter user"
     // const history = useHistory()
     // console.log(history)
-    if (!valueInput.validate && valueInput.touched) {
+    if (!valueInputTask.validate && valueInputTask.touched) {
         cls.push(classes.error)
     } else {
         cls.push("")
@@ -138,11 +138,11 @@ const UserPersonalTasks = (props) => {
                         shrink: true,
                     }}
                     type="text"
-                    value={valueInput.value}
+                    value={valueInputTask.value}
                     onKeyUp={(e) => {
                         props.keyHandle(e, props.history.match.params.id, user.tasks.length)
                     }}
-                    onChange={handleUserInput}
+                    onChange={handleUserInputTask}
                     type="text"></TextField>
                 <Button
                     onClick={() => {

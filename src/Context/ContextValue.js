@@ -5,6 +5,7 @@ export const useValue = (param) => {
 }
 function ContextValue({ children }) {
     const [valueInput, setValue] = useState({ value: "", validate: false, touched: false })
+    const [valueInputTask, setValueInputTask] = useState({ value: "", validate: false, touched: false })
     const [valueTodo, setValueTodor] = useState({ value: "", showModal: false, validate: false })
     const [errorMessage, setErrorMessage] = useState("")
     const handleUserInput = (e) => {
@@ -30,16 +31,40 @@ function ContextValue({ children }) {
             }
         })
     }
+    const handleUserInputTask = (e) => {
+        const value = e.target.value
+
+        const validate = /^[A-Z0-9]+[A-Z]{2,4}$/i.test(value)
+
+        setValueInputTask((prevstate) => {
+            if (validate) {
+                console.log("11111111111111111", validate)
+                setErrorMessage("")
+                return {
+                    value,
+                    validate,
+                    touched: false,
+                }
+            } else {
+                setErrorMessage("введите задачу пользвателя больше 3 букв")
+                return {
+                    value,
+                    validate,
+                    touched: true,
+                }
+            }
+        })
+    }
 
     const changeTitlebyModal = (e, textInput) => {
-        const value = e.target.value
+        const value = e.target.value.trim()
         console.log(textInput.current)
         const validate = /^[A-Z0-9]+[A-Z]{2,4}$/i.test(value)
 
         if (validate) {
-            setValueTodor({ ...valueTodo, value: value.trim(), validate, showModal: true })
+            setValueTodor({ ...valueTodo, value: value, validate, showModal: true })
         } else {
-            setValueTodor({ ...valueTodo, value: value.trim(), validate, showModal: true })
+            setValueTodor({ ...valueTodo, value: value, validate, showModal: true })
         }
     }
 
@@ -47,9 +72,12 @@ function ContextValue({ children }) {
         <Context.Provider
             value={{
                 valueInput,
-                handleUserInput,
-                setValue,
+                valueInputTask,
                 valueTodo,
+                handleUserInput,
+                handleUserInputTask,
+                setValue,
+                setValueInputTask,
                 setValueTodor,
                 changeTitlebyModal,
                 errorMessage,
