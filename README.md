@@ -1,6 +1,7 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
 Open in browser show this app  https://sergeyberez.github.io/todo-material-firebase/
 ## Available Scripts
 
